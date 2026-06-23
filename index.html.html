@@ -1,0 +1,2160 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Умай Групп — B2B Портал</title>
+<style>
+:root {
+  --g: #2d8c3c;
+  --g2: #1e6b2a;
+  --g3: #e8f5ea;
+  --g4: #c8e6c9;
+  --acc: #f57c00;
+  --red: #d32f2f;
+  --blue: #1565c0;
+  --dark: #1a1a1a;
+  --mid: #555;
+  --light: #888;
+  --border: #ddd;
+  --bg: #f5f7f5;
+  --white: #fff;
+  --card: #fff;
+  --shadow: 0 2px 8px rgba(0,0,0,.08);
+  --shadow2: 0 4px 20px rgba(0,0,0,.12);
+  --radius: 8px;
+  --radius2: 12px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',Arial,sans-serif;background:var(--bg);color:var(--dark);font-size:14px;line-height:1.5}
+/* SCREENS */
+.screen{display:none}
+.screen.active{display:block}
+/* LOGIN */
+#login-screen{min-height:100vh;display:none;align-items:center;justify-content:center;background:linear-gradient(135deg,#1e4d2b 0%,#2d8c3c 60%,#4caf50 100%)}
+#login-screen.active{display:flex}
+.login-box{background:var(--white);border-radius:16px;padding:48px 40px;width:400px;box-shadow:0 20px 60px rgba(0,0,0,.2)}
+.login-logo{text-align:center;margin-bottom:32px}
+.login-logo .logo-icon{width:64px;height:64px;background:var(--g);border-radius:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:28px}
+.login-logo h1{font-size:22px;font-weight:700;color:var(--dark)}
+.login-logo p{color:var(--light);font-size:13px;margin-top:4px}
+.login-tabs{display:flex;gap:4px;background:#f0f0f0;border-radius:8px;padding:4px;margin-bottom:24px}
+.login-tab{flex:1;padding:8px;border:none;background:none;border-radius:6px;cursor:pointer;font-size:13px;color:var(--mid);transition:.2s}
+.login-tab.active{background:var(--white);color:var(--g);font-weight:600;box-shadow:0 1px 4px rgba(0,0,0,.1)}
+.form-group{margin-bottom:16px}
+.form-group label{display:block;font-size:12px;font-weight:600;color:var(--mid);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:10px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:14px;transition:.2s;background:var(--white)}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:var(--g);box-shadow:0 0 0 3px rgba(45,140,60,.1)}
+.btn{padding:10px 20px;border:none;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;transition:.2s;display:inline-flex;align-items:center;gap:8px}
+.btn-primary{background:var(--g);color:#fff}
+.btn-primary:hover{background:var(--g2)}
+.btn-secondary{background:#f0f0f0;color:var(--dark)}
+.btn-secondary:hover{background:#e0e0e0}
+.btn-danger{background:var(--red);color:#fff}
+.btn-orange{background:var(--acc);color:#fff}
+.btn-full{width:100%;justify-content:center;padding:12px}
+.demo-accounts{margin-top:20px;padding:16px;background:#f8f8f8;border-radius:8px}
+.demo-accounts p{font-size:12px;color:var(--mid);margin-bottom:8px;font-weight:600}
+.demo-btn{display:flex;align-items:center;gap:8px;padding:8px 12px;background:var(--white);border:1px solid var(--border);border-radius:6px;cursor:pointer;font-size:12px;margin-bottom:6px;width:100%;transition:.2s}
+.demo-btn:hover{border-color:var(--g);color:var(--g)}
+.demo-btn .tag{background:var(--g3);color:var(--g);padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600}
+
+/* APP LAYOUT */
+#app{display:none;height:100vh;flex-direction:column}
+#app.active{display:flex}
+.topbar{background:var(--g);color:#fff;padding:0 24px;height:56px;display:flex;align-items:center;gap:16px;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.topbar-logo{font-size:18px;font-weight:800;letter-spacing:-.5px;display:flex;align-items:center;gap:10px}
+.topbar-logo span{background:rgba(255,255,255,.2);padding:4px 8px;border-radius:6px;font-size:12px;font-weight:500}
+.topbar-nav{display:flex;gap:4px;flex:1}
+.topbar-btn{padding:6px 16px;background:rgba(255,255,255,.1);border:none;color:#fff;border-radius:6px;cursor:pointer;font-size:13px;transition:.2s}
+.topbar-btn:hover,.topbar-btn.active{background:rgba(255,255,255,.25)}
+.topbar-right{display:flex;align-items:center;gap:12px;margin-left:auto}
+.topbar-user{display:flex;align-items:center;gap:8px;font-size:13px}
+.topbar-avatar{width:32px;height:32px;background:rgba(255,255,255,.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px}
+.topbar-logout{background:rgba(255,255,255,.1);border:none;color:#fff;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px}
+
+/* SIDEBAR + MAIN */
+.app-body{display:flex;flex:1;overflow:hidden}
+.sidebar{width:220px;background:var(--white);border-right:1px solid var(--border);overflow-y:auto;flex-shrink:0}
+.sidebar-section{padding:16px 12px 4px;font-size:11px;font-weight:700;color:var(--light);text-transform:uppercase;letter-spacing:.8px}
+.sidebar-item{display:flex;align-items:center;gap:10px;padding:10px 16px;cursor:pointer;transition:.15s;color:var(--mid);border-left:3px solid transparent;font-size:13px}
+.sidebar-item:hover{background:var(--g3);color:var(--g)}
+.sidebar-item.active{background:var(--g3);color:var(--g);border-left-color:var(--g);font-weight:600}
+.sidebar-item .icon{width:18px;text-align:center;font-size:16px}
+.sidebar-badge{margin-left:auto;background:var(--red);color:#fff;border-radius:10px;padding:1px 7px;font-size:11px}
+
+.main{flex:1;overflow-y:auto;padding:24px}
+
+/* CARDS */
+.card{background:var(--card);border-radius:var(--radius2);box-shadow:var(--shadow);padding:24px;margin-bottom:20px}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.card-title{font-size:16px;font-weight:700;color:var(--dark)}
+.card-subtitle{font-size:13px;color:var(--light);margin-top:2px}
+
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:20px}
+.stat-card{background:var(--white);border-radius:var(--radius2);padding:20px;box-shadow:var(--shadow);border-left:4px solid var(--g)}
+.stat-card.orange{border-left-color:var(--acc)}
+.stat-card.blue{border-left-color:var(--blue)}
+.stat-card.red{border-left-color:var(--red)}
+.stat-num{font-size:28px;font-weight:800;color:var(--dark)}
+.stat-label{font-size:12px;color:var(--light);margin-top:4px}
+.stat-change{font-size:12px;margin-top:8px;color:var(--g);font-weight:600}
+
+/* TABLES */
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{background:#f8f8f8;padding:10px 14px;text-align:left;font-size:12px;font-weight:700;color:var(--mid);border-bottom:2px solid var(--border);text-transform:uppercase;letter-spacing:.5px}
+.tbl td{padding:12px 14px;border-bottom:1px solid #f0f0f0;font-size:13px;vertical-align:middle}
+.tbl tr:hover td{background:#fafff8}
+.tbl tr:last-child td{border-bottom:none}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600}
+.badge-new{background:#e3f2fd;color:#1565c0}
+.badge-processing{background:#fff8e1;color:#f57c00}
+.badge-assembly{background:#f3e5f5;color:#7b1fa2}
+.badge-ready{background:#e8f5e9;color:#2e7d32}
+.badge-delivery{background:#e0f2f1;color:#00695c}
+.badge-done{background:#e8f5e9;color:#2e7d32}
+.badge-cancelled{background:#ffebee;color:#c62828}
+.badge-error{background:#ffebee;color:#c62828}
+.badge-active{background:#e8f5e9;color:#2e7d32}
+.badge-blocked{background:#ffebee;color:#c62828}
+.badge-pending{background:#fff8e1;color:#f57c00}
+
+/* ACTIONS */
+.action-btn{background:none;border:1px solid var(--border);padding:5px 10px;border-radius:6px;cursor:pointer;font-size:12px;transition:.15s;color:var(--mid)}
+.action-btn:hover{border-color:var(--g);color:var(--g);background:var(--g3)}
+.action-btn.danger:hover{border-color:var(--red);color:var(--red);background:#ffebee}
+
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center}
+.modal-overlay.open{display:flex}
+.modal{background:var(--white);border-radius:16px;width:680px;max-width:95vw;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.25)}
+.modal-header{padding:24px 28px 0;display:flex;align-items:center;justify-content:space-between}
+.modal-title{font-size:18px;font-weight:700}
+.modal-close{background:none;border:none;font-size:24px;cursor:pointer;color:var(--light);line-height:1}
+.modal-body{padding:24px 28px}
+.modal-footer{padding:0 28px 24px;display:flex;gap:12px;justify-content:flex-end}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.form-section{margin-bottom:20px}
+.form-section-title{font-size:12px;font-weight:700;color:var(--g);text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px;padding-bottom:6px;border-bottom:2px solid var(--g4)}
+
+/* ORDER FLOW */
+.order-steps{display:flex;align-items:center;margin-bottom:24px;padding:20px;background:var(--g3);border-radius:var(--radius2)}
+.step{display:flex;flex-direction:column;align-items:center;flex:1;position:relative}
+.step:not(:last-child)::after{content:'';position:absolute;top:14px;left:60%;width:80%;height:2px;background:var(--g4)}
+.step.done::after,.step.active::after{background:var(--g)}
+.step-dot{width:28px;height:28px;border-radius:50%;background:var(--border);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;z-index:1}
+.step.done .step-dot{background:var(--g)}
+.step.active .step-dot{background:var(--g);box-shadow:0 0 0 4px rgba(45,140,60,.2)}
+.step-label{font-size:11px;color:var(--mid);margin-top:6px;text-align:center}
+.step.active .step-label{color:var(--g);font-weight:600}
+
+/* CATALOG */
+.catalog-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+.product-card{background:var(--white);border-radius:var(--radius2);padding:16px;box-shadow:var(--shadow);transition:.2s;cursor:pointer;border:2px solid transparent}
+.product-card:hover{border-color:var(--g4);transform:translateY(-2px);box-shadow:var(--shadow2)}
+.product-img{width:100%;height:120px;background:linear-gradient(135deg,var(--g3),var(--g4));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:36px;margin-bottom:12px}
+.product-name{font-size:13px;font-weight:600;margin-bottom:4px;line-height:1.3}
+.product-price{font-size:16px;font-weight:800;color:var(--g)}
+.product-unit{font-size:11px;color:var(--light)}
+.product-barcode{font-size:10px;color:var(--light);margin-top:4px;font-family:monospace}
+
+/* CART */
+.cart-sidebar{width:320px;background:var(--white);border-left:1px solid var(--border);padding:20px;overflow-y:auto;flex-shrink:0}
+.cart-item{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid #f0f0f0}
+.cart-item-name{flex:1;font-size:13px}
+.cart-qty{display:flex;align-items:center;gap:6px}
+.qty-btn{width:24px;height:24px;border:1px solid var(--border);background:none;border-radius:4px;cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center}
+.qty-btn:hover{background:var(--g3);border-color:var(--g)}
+.cart-total{font-size:20px;font-weight:800;color:var(--dark);margin:16px 0}
+
+/* NOTIFICATIONS */
+.notification{position:fixed;bottom:24px;right:24px;background:var(--dark);color:#fff;padding:14px 20px;border-radius:10px;font-size:13px;z-index:9999;transform:translateY(80px);opacity:0;transition:.3s;max-width:320px}
+.notification.show{transform:none;opacity:1}
+.notification.success{background:var(--g)}
+.notification.error{background:var(--red)}
+.notification.warning{background:var(--acc)}
+
+/* CHIP FILTER */
+.chip-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.chip{padding:6px 14px;border:1.5px solid var(--border);border-radius:20px;cursor:pointer;font-size:12px;background:var(--white);transition:.15s}
+.chip:hover,.chip.active{border-color:var(--g);background:var(--g3);color:var(--g);font-weight:600}
+
+/* SEARCH */
+.search-bar{display:flex;gap:12px;margin-bottom:16px}
+.search-input{flex:1;padding:9px 14px;border:1.5px solid var(--border);border-radius:8px;font-size:13px}
+.search-input:focus{outline:none;border-color:var(--g)}
+
+/* TIMELINE */
+.timeline{padding:0;list-style:none}
+.tl-item{display:flex;gap:12px;margin-bottom:12px}
+.tl-dot{width:10px;height:10px;border-radius:50%;background:var(--g);flex-shrink:0;margin-top:4px}
+.tl-dot.grey{background:var(--light)}
+.tl-content{flex:1}
+.tl-title{font-size:13px;font-weight:600}
+.tl-time{font-size:11px;color:var(--light)}
+
+/* INFO BLOCK */
+.info-block{background:var(--g3);border-left:4px solid var(--g);padding:14px 16px;border-radius:0 8px 8px 0;margin-bottom:16px}
+.info-block.warning{background:#fff8e1;border-left-color:var(--acc)}
+.info-block.error{background:#ffebee;border-left-color:var(--red)}
+.info-block strong{display:block;margin-bottom:4px;font-size:13px}
+.info-block p{font-size:12px;color:var(--mid)}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:60px 20px;color:var(--light)}
+.empty-state .icon{font-size:48px;margin-bottom:16px;opacity:.4}
+.empty-state p{font-size:14px}
+
+/* MISC */
+.divider{height:1px;background:var(--border);margin:16px 0}
+.text-green{color:var(--g)}
+.text-red{color:var(--red)}
+.text-orange{color:var(--acc)}
+.text-muted{color:var(--light)}
+.fw-bold{font-weight:700}
+.mt-2{margin-top:8px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.required{color:var(--red)}
+.file-upload-area{border:2px dashed var(--border);border-radius:8px;padding:24px;text-align:center;cursor:pointer;transition:.2s}
+.file-upload-area:hover{border-color:var(--g);background:var(--g3)}
+.file-upload-area.has-file{border-color:var(--g);background:var(--g3)}
+.progress-bar{height:6px;background:#e0e0e0;border-radius:3px;overflow:hidden;margin-top:4px}
+.progress-fill{height:100%;background:var(--g);transition:.3s}
+
+/* TABS */
+.tab-row{display:flex;border-bottom:2px solid var(--border);margin-bottom:20px}
+.tab{padding:10px 20px;cursor:pointer;font-size:13px;font-weight:500;color:var(--mid);border-bottom:3px solid transparent;margin-bottom:-2px;transition:.15s}
+.tab:hover{color:var(--g)}
+.tab.active{color:var(--g);border-bottom-color:var(--g);font-weight:700}
+.tab-content{display:none}
+.tab-content.active{display:block}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#ccc;border-radius:3px}
+
+/* LANDING */
+#landing-page{min-height:100vh;display:none;flex-direction:column;background:linear-gradient(145deg,#0d2e16 0%,#1a5c2a 50%,#2d8c3c 100%)}
+#landing-page.active{display:flex}
+.lnav{padding:0 48px;height:64px;display:flex;align-items:center;justify-content:space-between;background:rgba(0,0,0,.2)}
+.llogo{color:#fff;font-size:20px;font-weight:800;display:flex;align-items:center;gap:10px}
+.llogo-dot{width:36px;height:36px;background:var(--g4);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.lhero{flex:1;display:flex;align-items:center;justify-content:center;padding:60px 48px;gap:80px}
+.lhero-text{max-width:500px}
+.ltitle{font-size:44px;font-weight:900;color:#fff;line-height:1.1;margin-bottom:20px}
+.ltitle em{color:var(--g4);font-style:normal}
+.ldesc{font-size:15px;color:rgba(255,255,255,.75);line-height:1.7;margin-bottom:28px}
+.lcta{display:flex;gap:14px}
+.cta-main{background:#fff;color:var(--g2);padding:13px 28px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;border:none}
+.cta-main:hover{background:#e8f5ea}
+.cta-sec{background:rgba(255,255,255,.12);color:#fff;padding:13px 24px;border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;border:1.5px solid rgba(255,255,255,.3)}
+.cta-sec:hover{background:rgba(255,255,255,.22)}
+.lcards{display:flex;flex-direction:column;gap:12px;min-width:260px}
+.lcard{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:15px 18px;color:#fff;display:flex;align-items:center;gap:12px}
+.lcard-ico{width:38px;height:38px;background:rgba(255,255,255,.15);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.lcard-t{font-weight:700;font-size:13px;margin-bottom:2px}.lcard-s{font-size:12px;opacity:.8}
+.lsteps{background:rgba(0,0,0,.25);padding:24px 48px;display:flex;justify-content:center;gap:36px;align-items:center}
+.lstep{text-align:center;color:rgba(255,255,255,.8)}
+.lstep-n{width:32px;height:32px;background:var(--g4);color:var(--g2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:12px;margin:0 auto 7px}
+.lstep-t{font-size:12px;font-weight:700;color:#fff;margin-bottom:2px}.lstep-d{font-size:11px}
+.larr{font-size:16px;color:rgba(255,255,255,.3)}
+/* REG OVERLAY */
+#reg-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:600;align-items:flex-start;justify-content:center;overflow-y:auto;padding:28px 16px;backdrop-filter:blur(4px)}
+#reg-overlay.open{display:flex}
+.rbox{background:#fff;border-radius:20px;width:680px;max-width:100%;box-shadow:0 24px 80px rgba(0,0,0,.3);overflow:hidden;margin:auto}
+.rhdr{background:linear-gradient(135deg,var(--g2),var(--g));padding:24px 28px;color:#fff}
+.rhdr h2{font-size:19px;font-weight:800;margin-bottom:4px}
+.rhdr p{font-size:12px;opacity:.85}
+.rsbar{display:flex;background:rgba(0,0,0,.2)}
+.rsbi{flex:1;padding:9px 4px;text-align:center;font-size:11px;font-weight:600;color:rgba(255,255,255,.45);border-bottom:3px solid transparent}
+.rsbi.active{color:#fff;border-bottom-color:#fff}.rsbi.done{color:var(--g4);border-bottom-color:var(--g4)}
+.rbody{padding:24px 28px}.rftr{padding:0 28px 24px;display:flex;justify-content:space-between}
+/* REG SUCCESS */
+#reg-success-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:700;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+#reg-success-ov.open{display:flex}
+.rsbox{background:#fff;border-radius:20px;padding:48px 40px;width:480px;text-align:center;box-shadow:0 24px 80px rgba(0,0,0,.3)}
+.rsico{width:80px;height:80px;background:var(--g3);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 20px}
+/* LOGIN OVERLAY changes */
+#login-overlay-modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:500;align-items:center;justify-content:center;backdrop-filter:blur(4px)}
+#login-overlay-modal.open{display:flex}
+/* PROFILE TABS */
+.ptabrow{display:flex;border-bottom:2px solid var(--border);margin-bottom:16px}
+.ptab{padding:8px 16px;cursor:pointer;font-size:13px;font-weight:500;color:var(--mid);border-bottom:3px solid transparent;margin-bottom:-2px;transition:.15s}
+.ptab:hover{color:var(--g)}.ptab.active{color:var(--g);border-bottom-color:var(--g);font-weight:700}
+.ptabp{display:none}.ptabp.active{display:block}
+.g2-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+@media (max-width:900px){.lhero{flex-direction:column;gap:32px;padding:36px 20px}.lnav{padding:0 20px}.lsteps{flex-wrap:wrap;padding:20px}.stats-row,.grid-2,.g2-grid,.form-row{grid-template-columns:1fr}.cart-sidebar{display:none}.sidebar{width:190px}.main{padding:16px}.ltitle{font-size:34px}}
+
+/* PROFILE ROW */
+.prow{display:flex;justify-content:space-between;align-items:flex-start;padding:8px 0;border-bottom:1px solid #f5f5f5}
+.prow:last-child{border-bottom:none}
+.prowl{color:var(--mid);font-size:13px}.prowv{font-weight:600;font-size:13px;text-align:right;max-width:60%}
+/* FILE ZONE */
+.fzone{border:2px dashed var(--border);border-radius:8px;padding:16px;text-align:center;cursor:pointer;transition:.2s;background:#fafafa}
+.fzone:hover{border-color:var(--g);background:var(--g3)}.fzone.has{border-color:var(--g);background:var(--g3);border-style:solid}
+/* APP CARDS */
+.apc{background:#fff;border-radius:var(--radius2);box-shadow:var(--shadow);padding:18px;margin-bottom:14px;border-left:4px solid var(--blue)}
+.apc.rev{border-left-color:var(--acc)}.apc.app{border-left-color:var(--g)}.apc.rej{border-left-color:var(--red)}
+</style>
+</head>
+<body>
+
+<!-- LANDING PAGE -->
+<div id="landing-page" class="screen active">
+  <nav class="lnav">
+    <div class="llogo"><div class="llogo-dot">🌿</div> Умай Групп</div>
+    <div style="display:flex;gap:12px">
+      <button style="padding:9px 22px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;background:rgba(255,255,255,.12);color:#fff;border:1.5px solid rgba(255,255,255,.3)" onclick="openRegOverlay()">📝 Подать заявку</button>
+      <button style="padding:9px 22px;border-radius:8px;cursor:pointer;font-size:14px;font-weight:600;background:#fff;color:var(--g2);border:none" onclick="openLoginModal()">🔑 Войти в кабинет</button>
+    </div>
+  </nav>
+  <div class="lhero">
+    <div class="lhero-text">
+      <div style="font-size:12px;font-weight:700;color:var(--g4);text-transform:uppercase;letter-spacing:2px;margin-bottom:16px">B2B Корпоративный портал</div>
+      <h1 class="ltitle">Закупки для <em>бизнеса</em> онлайн</h1>
+      <p class="ldesc">Оформляйте корпоративные заказы без звонков и бумажной волокиты. Автоматическая передача в 1С, электронные накладные, доставка по Бишкеку.</p>
+      <div class="lcta">
+        <button class="cta-main" onclick="openRegOverlay()">Стать партнёром →</button>
+        <button class="cta-sec" onclick="openLoginModal()">Уже есть кабинет</button>
+      </div>
+    </div>
+    <div class="lcards">
+      <div class="lcard"><div class="lcard-ico">📦</div><div><div class="lcard-t">Тысячи товаров</div><div class="lcard-s">Корпоративные цены, передача в 1С</div></div></div>
+      <div class="lcard"><div class="lcard-ico">📄</div><div><div class="lcard-t">Электронный документооборот</div><div class="lcard-s">Накладные и счета автоматически</div></div></div>
+      <div class="lcard"><div class="lcard-ico">🚚</div><div><div class="lcard-t">Доставка в тот же день</div><div class="lcard-s">Заказы до 11:00 — курьер сегодня</div></div></div>
+    </div>
+  </div>
+  <div class="lsteps">
+    <div class="lstep"><div class="lstep-n">1</div><div class="lstep-t">Подайте заявку</div><div class="lstep-d">Реквизиты и документы</div></div>
+    <div class="larr">→</div>
+    <div class="lstep"><div class="lstep-n">2</div><div class="lstep-t">Менеджер проверит</div><div class="lstep-d">В течение рабочего дня</div></div>
+    <div class="larr">→</div>
+    <div class="lstep"><div class="lstep-n">3</div><div class="lstep-t">Получите доступ</div><div class="lstep-d">Логин и пароль на email</div></div>
+    <div class="larr">→</div>
+    <div class="lstep"><div class="lstep-n">4</div><div class="lstep-t">Заказывайте</div><div class="lstep-d">Корпоративные закупки онлайн</div></div>
+  </div>
+</div>
+
+<!-- REGISTRATION OVERLAY -->
+<div id="reg-overlay">
+  <div class="rbox">
+    <div class="rhdr">
+      <h2>📝 Заявка на подключение к B2B порталу</h2>
+      <p>Заполните данные организации — рассмотрим в течение рабочего дня и пришлём логин на email</p>
+      <div class="rsbar">
+        <div class="rsbi active" id="rs1">1. Организация</div>
+        <div class="rsbi" id="rs2">2. Реквизиты</div>
+        <div class="rsbi" id="rs3">3. Доверенность</div>
+        <div class="rsbi" id="rs4">4. Документы</div>
+      </div>
+    </div>
+    <div class="rbody" id="rbody"></div>
+    <div class="rftr" id="rftr"></div>
+  </div>
+</div>
+
+<!-- REG SUCCESS -->
+<div id="reg-success-ov">
+  <div class="rsbox">
+    <div class="rsico">📬</div>
+    <h2 style="font-size:22px;font-weight:800;margin-bottom:12px">Заявка отправлена!</h2>
+    <p style="font-size:14px;color:var(--mid);line-height:1.7;margin-bottom:8px">Ваша заявка принята и передана менеджеру корпоративного отдела.</p>
+    <p style="font-size:14px;color:var(--mid);line-height:1.7">Мы рассмотрим её <strong>в течение рабочего дня</strong> и пришлём логин и временный пароль на ваш email.</p>
+    <p style="margin-top:16px;font-size:13px;color:var(--g);font-weight:600">📞 Если срочно: +996 312 123-456</p>
+    <button class="btn btn-primary btn-full" style="margin-top:24px" onclick="closeRegSuccess()">Понятно, буду ждать</button>
+  </div>
+</div>
+
+<!-- ========== LOGIN ========== -->
+<div id="login-screen" class="screen">
+  <div class="login-box">
+    <div class="login-logo">
+      <div class="logo-icon">🌿</div>
+      <h1>Умай Групп</h1>
+      <p>B2B Корпоративный портал</p>
+    </div>
+    <div class="login-tabs">
+      <button class="login-tab active" onclick="switchLoginTab('b2b')">Клиент</button>
+      <button class="login-tab" onclick="switchLoginTab('manager')">Менеджер</button>
+      <button class="login-tab" onclick="switchLoginTab('1c')">Оператор 1С</button>
+    </div>
+    <div class="form-group">
+      <label>Логин</label>
+      <input type="text" id="login-input" value="akademiya" placeholder="Введите логин">
+    </div>
+    <div class="form-group">
+      <label>Пароль</label>
+      <input type="password" id="pass-input" value="1234" placeholder="Введите пароль">
+    </div>
+    <button class="btn btn-primary btn-full" onclick="doLogin()">Войти</button>
+    <div style="text-align:center;margin-top:10px;font-size:13px;color:var(--mid)">
+      Нет кабинета? <button onclick="closeLoginModal();openRegOverlay()" style="background:none;border:none;color:var(--g);font-weight:600;cursor:pointer;font-size:13px">Подать заявку →</button>
+    </div>
+    <div class="demo-accounts">
+      <p>Быстрый вход (демо):</p>
+      <button class="demo-btn" onclick="quickLogin('akademiya','1234','client')">
+        <span class="tag">Клиент</span> Академия развития — akademiya
+      </button>
+      <button class="demo-btn" onclick="quickLogin('alpha','1234','client')">
+        <span class="tag">Клиент</span> ОсОО Альфа Трейд — alpha
+      </button>
+      <button class="demo-btn" onclick="quickLogin('manager','admin','manager')">
+        <span class="tag">Менеджер</span> Панель управления
+      </button>
+      <button class="demo-btn" onclick="quickLogin('operator','admin','1c')">
+        <span class="tag">1С</span> Рабочий стол оператора
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== APP ========== -->
+<div id="app" class="screen">
+  <div class="topbar">
+    <div class="topbar-logo">
+      🌿 Globus Online <span id="topbar-role-tag">B2B</span>
+    </div>
+    <div class="topbar-nav" id="topbar-nav"></div>
+    <div class="topbar-right">
+      <div class="topbar-user">
+        <div class="topbar-avatar" id="topbar-avatar">?</div>
+        <span id="topbar-username">—</span>
+      </div>
+      <button class="topbar-logout" onclick="logout()">Выйти</button>
+    </div>
+  </div>
+  <div class="app-body">
+    <div class="sidebar" id="sidebar"></div>
+    <div class="main" id="main-content"></div>
+  </div>
+</div>
+
+<!-- ========== MODALS ========== -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal" id="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-title">—</div>
+      <button class="modal-close" onclick="closeModalDirect()">×</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-footer" id="modal-footer"></div>
+  </div>
+</div>
+
+<div class="notification" id="notif"></div>
+
+<script>
+// ============================================================
+// STATE
+// ============================================================
+const STATE = {
+  applications: [
+    {id:'ЗАЯ-001',org:'ТОО Новый Горизонт',inn:'02345678901234',email:'info@ngorzon.kg',phone:'+996700444555',
+     director:{name:'Абдыракманов Марат',phone:'+996700444555'},
+     accountant:{name:'Сейткалиева Айнура',phone:'+996700444556'},
+     buyer:{name:'Токтоматов Данияр',phone:'+996700444557'},
+     address:'г. Бишкек, ул. Байтик Баатыра 12, оф. 5',legal_address:'г. Бишкек, ул. Байтик Баатыра 12',
+     bank:'ОАО КИКБ',bank_account:'1250000123456789',bik:'109007',
+     proxy_name:'Абдыракманов Марат',proxy_num:'НГ-001/26',proxy_date:'31.12.2026',
+     docs:{charter:'устав_нгорзон.pdf',reg:'свид_рег.pdf',inn_doc:'инн.pdf',proxy:'dov_ng001.pdf'},
+     payment:'bank',comment:'',status:'new',created:'23.06.2026 10:15'},
+  ],
+
+  user: null,
+  role: null, // 'client','manager','1c'
+  page: null,
+  cart: [],
+  orders: [
+    {id:'ЗКК-2026-0041',client:'КК0003',clientName:'ОУ Академия развития',inn:'01104201610081',
+     date:'23.06.2026 09:14',status:'assembly',items:[
+      {barcode:'2581056711754',name:'Булочки к завтраку 380г СП GL',qty:2,unit:'шт',price:120,vat:12},
+      {barcode:'2551659617548',name:'Лепёшка Май точок 400г',qty:1,unit:'шт',price:47,vat:12},
+      {barcode:'4820001110388',name:'Масло подсолнечное Олейна 1л',qty:1,unit:'шт',price:180,vat:12},
+      {barcode:'4700040111846',name:'Молоко Умут 3,2% 1000г',qty:2,unit:'шт',price:65,vat:12},
+      {barcode:'4700002062919',name:'Сметана Белая Река 20% 300г',qty:1,unit:'шт',price:131,vat:12},
+     ],
+     address:'г. Бишкек, ул. Логвиненко 25, офис 3',
+     proxy:{name:'Сидоров Сергей Сергеевич',num:'ДВ-125/26',validUntil:'31.12.2026',file:'доверенность_ДВ-125-26.pdf'},
+     contacts:{director:{name:'Иванов И.И.',phone:'+996 555 123-456'},accountant:{name:'Петрова А.А.',phone:'+996 555 654-321'},buyer:{name:'Сидоров С.С.',phone:'+996 550 777-888'}},
+     payment:'bank',total:592.58,market:'Глобус-11',code1c:'00006311'},
+    {id:'ЗКК-2026-0040',client:'КК0001',clientName:'ОсОО Альфа Трейд',inn:'01234567890123',
+     date:'23.06.2026 08:47',status:'processing',items:[
+      {barcode:'4700000160211',name:'Вода Shoro Legenda стол 0.5л',qty:10,unit:'шт',price:27,vat:12},
+      {barcode:'4610003255039',name:'Крекер Любятово Карпер Вес',qty:2,unit:'кг',price:429,vat:12},
+     ],
+     address:'г. Бишкек, ул. Манаса 44',
+     proxy:{name:'Алиева Гульнара',num:'АТ-005/26',validUntil:'30.09.2026',file:'dov_AT005.pdf'},
+     contacts:{director:{name:'Сатаров А.К.',phone:'+996 700 111-222'},accountant:{name:'Омурова Б.',phone:'+996 700 333-444'},buyer:{name:'Токтоматов Д.',phone:'+996 700 555-666'}},
+     payment:'cash',total:1258.00,market:'Глобус-1',code1c:'00004567'},
+    {id:'ЗКК-2026-0039',client:'КК0001',clientName:'ОсОО Альфа Трейд',inn:'01234567890123',
+     date:'22.06.2026 10:30',status:'delivered',items:[
+      {barcode:'4600000001111',name:'Сахар рафинад Русский 1кг',qty:5,unit:'шт',price:166,vat:12},
+     ],
+     address:'г. Бишкек, ул. Манаса 44',
+     proxy:{name:'Алиева Гульнара',num:'АТ-004/26',validUntil:'30.09.2026',file:'dov_AT004.pdf'},
+     contacts:{director:{name:'Сатаров А.К.',phone:'+996 700 111-222'},accountant:{name:'Омурова Б.',phone:'+996 700 333-444'},buyer:{name:'Токтоматов Д.',phone:'+996 700 555-666'}},
+     payment:'bank',total:830.00,market:'Глобус-1',code1c:'00004567'},
+    {id:'ЗКК-2026-0038',client:'КК0003',clientName:'ОУ Академия развития',inn:'01104201610081',
+     date:'21.06.2026 11:05',status:'error',items:[],
+     address:'',proxy:{name:'',num:'',validUntil:'',file:''},
+     contacts:{director:{name:'',phone:''},accountant:{name:'',phone:''},buyer:{name:'',phone:''}},
+     payment:'bank',total:0,market:'',code1c:'NOTFOUND'},
+  ],
+  clients: [
+    {code:'КК0001',org:'ОсОО Альфа Трейд',inn:'01234567890123',email:'alfa.trade@example.kg',phone:'+996700111222',login:'alpha',code1c:'00004567',name1c:'Альфа Трейд ОсОО',payment:'bank',status:'active',legal_address:'г. Бишкек, пр. Чуй 45',address:'г. Бишкек, пр. Чуй 45',bank:'ОАО Банк Азии',bank_account:'1060000987654321',bik:'104001',director:{name:'Сатаров А.К.',phone:'+996700111222'},accountant:{name:'Омурова Б.',phone:'+996700333444'},buyer:{name:'Токтоматов Д.',phone:'+996700555666'},proxy:{name:'Алиева Гульнара',num:'АТ-005/26',valid:'30.09.2026',file:'dov_AT005.pdf'},comment:'VIP клиент',proxy_expires:'30.09.2026'},
+    {code:'КК0002',org:'ИП Маматов Бахадир',inn:'09876543210987',email:'mamatov@example.kg',phone:'+996500222333',login:'mamatov',code1c:'00005120',name1c:'Маматов Бахадир ИП',payment:'cash',status:'active',legal_address:'г. Бишкек, ул. Токтогула 12',address:'г. Бишкек, ул. Токтогула 12',bank:'',bank_account:'',bik:'',director:{name:'Маматов Б.',phone:'+996500222333'},accountant:{name:'—',phone:''},buyer:{name:'Маматов Б.',phone:'+996500222333'},proxy:{name:'Маматов Бахадир',num:'МБ-001/26',valid:'15.08.2026',file:'dov_MB001.pdf'},comment:'',proxy_expires:'15.08.2026'},
+    {code:'КК0003',org:'ОУ Академия развития',inn:'01104201610081',email:'accountant@academy.kg',phone:'+996555123456',login:'akademiya',code1c:'00006311',name1c:'Академия развития ОУ',payment:'bank',status:'active',legal_address:'г. Бишкек, ул. Фатьянова 166',address:'г. Бишкек, ул. Логвиненко 25, офис 3',bank:'ОАО Керемет Банк',bank_account:'1360043000090907',bik:'136001',director:{name:'Иванов И.И.',phone:'+996555123456'},accountant:{name:'Петрова А.А.',phone:'+996555654321'},buyer:{name:'Сидоров С.С.',phone:'+996550777888'},proxy:{name:'Сидоров Сергей Сергеевич',num:'ДВ-125/26',valid:'31.12.2026',file:'доверенность_ДВ-125-26.pdf'},comment:'Школа',proxy_expires:'31.12.2026'},
+    {code:'КК0004',org:'ОсОО Восток Сервис',inn:'12312312312312',email:'vostok@example.kg',phone:'+996700999888',login:'vostok',code1c:'00007642',name1c:'Восток Сервис ОсОО',payment:'cash',status:'blocked',legal_address:'г. Бишкек, ул. Фрунзе 89',address:'г. Бишкек, ул. Фрунзе 89',bank:'',bank_account:'',bik:'',director:{name:'Восток Д.',phone:'+996700999888'},accountant:{name:'—',phone:''},buyer:{name:'—',phone:''},proxy:{name:'',num:'',valid:'01.01.2026',file:''},comment:'Долг по оплате',proxy_expires:'01.01.2026'},
+  ],
+  products: [
+    {barcode:'4700000160211',name:'Вода Shoro Legenda стол. 0.5л',price:27,unit:'шт',category:'Напитки',emoji:'💧',vat:12},
+    {barcode:'4610003255039',name:'Крекер Любятово Карпер Вес',price:429,unit:'кг',category:'Снеки',emoji:'🍪',vat:12},
+    {barcode:'2571464027086',name:'Пакет Глобус ЭКО бол 1шт',price:3,unit:'шт',category:'Прочее',emoji:'🛍️',vat:0},
+    {barcode:'2393921',name:'Печенье Яшкино к кофе Вес',price:275,unit:'кг',category:'Снеки',emoji:'🍪',vat:12},
+    {barcode:'4700013700152',name:'Сахар рафинад Ак-Кант 50кг',price:100,unit:'шт',category:'Бакалея',emoji:'🧂',vat:12},
+    {barcode:'8801037038941',name:'Сливки сухие Frima 1кг 3МДК',price:542,unit:'шт',category:'Молочное',emoji:'🥛',vat:12},
+    {barcode:'4605246005817',name:'Чай Greenfield Golden Ceylon 100пак',price:497,unit:'шт',category:'Напитки',emoji:'🍵',vat:12},
+    {barcode:'2581056711754',name:'Булочки к завтраку 380г СП GL',price:120,unit:'шт',category:'Хлеб',emoji:'🥐',vat:12},
+    {barcode:'4820001110388',name:'Масло подсолнечное Олейна 1л',price:180,unit:'шт',category:'Масла',emoji:'🫙',vat:12},
+    {barcode:'4700040111846',name:'Молоко Умут 3,2% 1000г т/п',price:65,unit:'шт',category:'Молочное',emoji:'🥛',vat:12},
+    {barcode:'2551659617548',name:'Лепёшка Май точок 400г ИП',price:47,unit:'шт',category:'Хлеб',emoji:'🫓',vat:12},
+    {barcode:'4700002062919',name:'Сметана Белая Река 20% 300г',price:131,unit:'шт',category:'Молочное',emoji:'🥛',vat:12},
+  ],
+  checkoutStep: 1,
+  checkoutData: {},
+};
+
+const USERS = {
+  'alpha': {pass:'1234',role:'client',clientCode:'КК0001',name:'ОсОО Альфа Трейд'},
+  'akademiya': {pass:'1234',role:'client',clientCode:'КК0003',name:'ОУ Академия развития'},
+  'manager': {pass:'admin',role:'manager',name:'Менеджер Корп. отдела'},
+  'operator': {pass:'admin',role:'1c',name:'Оператор 1С'},
+};
+
+// ============================================================
+// AUTH
+// ============================================================
+function switchLoginTab(t){
+  document.querySelectorAll('.login-tab').forEach((b,i)=>b.classList.toggle('active',['b2b','manager','1c'][i]===t));
+  const map = {b2b:['akademiya','1234'],manager:['manager','admin'],'1c':['operator','admin']};
+  document.getElementById('login-input').value=map[t][0];
+  document.getElementById('pass-input').value=map[t][1];
+}
+function quickLogin(login,pass,role){
+  document.getElementById('login-input').value=login;
+  document.getElementById('pass-input').value=pass;
+  doLogin();
+}
+function doLogin(){
+  const login=document.getElementById('login-input').value.trim();
+  const pass=document.getElementById('pass-input').value.trim();
+  const u=USERS[login];
+  if(!u||u.pass!==pass){notify('Неверный логин или пароль','error');return;}
+  if(u.role==='client'){
+    const c=STATE.clients.find(x=>x.login===login);
+    if(c&&c.status==='blocked'){notify('Аккаунт заблокирован. Обратитесь к менеджеру','error');return;}
+  }
+  STATE.user=u;STATE.role=u.role;
+  document.getElementById('topbar-username').textContent=u.name;
+  document.getElementById('topbar-avatar').textContent=u.name[0].toUpperCase();
+  document.getElementById('topbar-role-tag').textContent=u.role==='client'?'B2B Клиент':u.role==='manager'?'Менеджер':'Оператор 1С';
+  document.getElementById('login-screen').classList.remove('active');
+  document.getElementById('app').classList.add('active');
+  buildUI();
+}
+function logout(){
+  STATE.user=null;STATE.cart=[];
+  document.getElementById('login-screen').classList.add('active');
+  document.getElementById('app').classList.remove('active');
+}
+
+// ============================================================
+// UI BUILDER
+// ============================================================
+function buildUI(){
+  const r=STATE.role;
+  const nav=document.getElementById('topbar-nav');
+  const sb=document.getElementById('sidebar');
+
+  if(r==='client'){
+    const c=STATE.clients.find(x=>x.login===STATE.user.name.toLowerCase().replace(/ /g,''))||
+            STATE.clients.find(x=>x.code===STATE.user.clientCode);
+    nav.innerHTML=`
+      <button class="topbar-btn" onclick="showPage('catalog')">📦 Каталог</button>
+      <button class="topbar-btn" onclick="showPage('orders')">📋 Мои заказы</button>
+      <button class="topbar-btn" onclick="showPage('profile')">🏢 Профиль</button>`;
+    sb.innerHTML=`
+      <div class="sidebar-section">Корзина</div>
+      <div id="cart-summary" style="padding:12px"></div>
+      <div style="padding:12px"><button class="btn btn-primary btn-full" onclick="startCheckout()" id="checkout-btn" style="display:none">Оформить заказ</button></div>`;
+    showPage('dashboard-client');
+  } else if(r==='manager'){
+    nav.innerHTML=`
+      <button class="topbar-btn" onclick="showPage('admin-orders')">📋 Заказы</button>
+      <button class="topbar-btn" onclick="showPage('admin-clients')">🏢 Клиенты</button>
+      <button class="topbar-btn" onclick="showPage('admin-dash')">📊 Дашборд</button>`;
+    sb.innerHTML=`
+      <div class="sidebar-section">Навигация</div>
+      <div class="sidebar-item active" onclick="showPage('admin-dash')"><span class="icon">📊</span>Дашборд</div>
+      <div class="sidebar-item" onclick="showPage('admin-orders')"><span class="icon">📋</span>Заказы <span class="sidebar-badge" id="sb-new-orders">2</span></div>
+      <div class="sidebar-item" onclick="showPage('admin-clients')"><span class="icon">🏢</span>Клиенты</div>
+      <div class="sidebar-section">Настройки</div>
+      <div class="sidebar-item" onclick="notify('Раздел в разработке')"><span class="icon">⚙️</span>Настройки</div>`;
+    showPage('admin-dash');
+  } else {
+    nav.innerHTML=`
+      <button class="topbar-btn" onclick="showPage('1c-orders')">📥 Заказы с портала</button>
+      <button class="topbar-btn" onclick="showPage('1c-docs')">📄 Документы</button>`;
+    sb.innerHTML=`
+      <div class="sidebar-section">Рабочий стол 1С</div>
+      <div class="sidebar-item active" onclick="showPage('1c-orders')"><span class="icon">📥</span>Входящие заказы <span class="sidebar-badge">3</span></div>
+      <div class="sidebar-item" onclick="showPage('1c-docs')"><span class="icon">📄</span>Документы</div>
+      <div class="sidebar-item" onclick="showPage('1c-errors')"><span class="icon">⚠️</span>Ошибки загрузки <span class="sidebar-badge" style="background:#f57c00">1</span></div>`;
+    showPage('1c-orders');
+  }
+}
+
+function showPage(page){
+  STATE.page=page;
+  document.querySelectorAll('.sidebar-item').forEach(el=>{
+    el.classList.toggle('active', el.getAttribute('onclick')&&el.getAttribute('onclick').includes(`'${page}'`));
+  });
+  const mc=document.getElementById('main-content');
+  const pages={
+    'dashboard-client': renderClientDash,
+    'catalog': renderCatalog,
+    'orders': renderClientOrders,
+    'profile': renderClientProfile,
+    'checkout': renderCheckout,
+    'admin-dash': renderManagerDash,
+    'admin-orders': renderManagerOrders,
+    'admin-clients': renderManagerClients,
+    '1c-orders': render1cOrders,
+    '1c-docs': render1cDocs,
+    '1c-errors': render1cErrors,
+  };
+  if(pages[page]) mc.innerHTML=pages[page]();
+  else mc.innerHTML=`<div class="empty-state"><div class="icon">🔧</div><p>Раздел в разработке</p></div>`;
+  updateCartSidebar();
+}
+
+// ============================================================
+// CLIENT — DASHBOARD
+// ============================================================
+function renderClientDash(){
+  const c=STATE.clients.find(x=>x.code===STATE.user.clientCode)||STATE.clients[2];
+  const myOrders=STATE.orders.filter(o=>o.client===c.code);
+  const active=myOrders.filter(o=>!['delivered','cancelled'].includes(o.status));
+  const total=myOrders.reduce((s,o)=>s+o.total,0);
+  const deadline=new Date().getHours()<11;
+  return `
+  <div style="margin-bottom:20px">
+    <h2 style="font-size:22px;font-weight:800">Добро пожаловать, ${c.org}!</h2>
+    <p class="text-muted">Портал корпоративных закупок Умай Групп</p>
+  </div>
+  ${deadline?`<div class="info-block"><strong>✅ До 11:00 — заказы доставят сегодня</strong><p>Успейте оформить заказ до дедлайна для доставки в текущий день</p></div>`
+  :`<div class="info-block warning"><strong>⏰ После 11:00 — доставка завтра</strong><p>Заказы, оформленные сейчас, будут доставлены на следующий рабочий день</p></div>`}
+  <div class="stats-row" style="grid-template-columns:repeat(3,1fr)">
+    <div class="stat-card"><div class="stat-num">${myOrders.length}</div><div class="stat-label">Всего заказов</div></div>
+    <div class="stat-card orange"><div class="stat-num">${active.length}</div><div class="stat-label">Активных</div></div>
+    <div class="stat-card blue"><div class="stat-num">${total.toLocaleString('ru')} KGS</div><div class="stat-label">Общая сумма</div></div>
+  </div>
+  <div class="grid-2">
+    <div class="card" onclick="showPage('catalog')" style="cursor:pointer;border:2px solid var(--g4);transition:.2s" onmouseover="this.style.borderColor='var(--g)'" onmouseout="this.style.borderColor='var(--g4)'">
+      <div style="font-size:40px;margin-bottom:12px">📦</div>
+      <div class="card-title">Создать заказ</div>
+      <p class="text-muted" style="margin-top:6px;font-size:13px">Перейдите в каталог и выберите товары</p>
+    </div>
+    <div class="card" onclick="showPage('orders')" style="cursor:pointer;border:2px solid var(--g4);transition:.2s" onmouseover="this.style.borderColor='var(--g)'" onmouseout="this.style.borderColor='var(--g4)'">
+      <div style="font-size:40px;margin-bottom:12px">📋</div>
+      <div class="card-title">История заказов</div>
+      <p class="text-muted" style="margin-top:6px;font-size:13px">${myOrders.length} заказов в системе</p>
+    </div>
+  </div>
+  ${active.length?`
+  <div class="card">
+    <div class="card-header"><div class="card-title">Активные заказы</div></div>
+    <table class="tbl"><thead><tr><th>Номер</th><th>Дата</th><th>Статус</th><th>Сумма</th><th></th></tr></thead><tbody>
+    ${active.map(o=>`<tr>
+      <td class="fw-bold">${o.id}</td>
+      <td>${o.date}</td>
+      <td>${statusBadge(o.status)}</td>
+      <td class="fw-bold text-green">${o.total.toLocaleString('ru')} KGS</td>
+      <td><button class="action-btn" onclick="openOrderDetail('${o.id}')">Детали</button></td>
+    </tr>`).join('')}
+    </tbody></table>
+  </div>`:''}`;
+}
+
+// ============================================================
+// CLIENT — CATALOG
+// ============================================================
+function renderCatalog(){
+  const cats=['Все',...new Set(STATE.products.map(p=>p.category))];
+  return `
+  <div class="card-header" style="margin-bottom:16px">
+    <div><h2 class="card-title">Каталог товаров</h2><div class="card-subtitle">Корпоративные цены</div></div>
+    <div style="display:flex;align-items:center;gap:12px">
+      <span style="font-size:13px;color:var(--mid)">Товаров в корзине: <b id="cart-count">${STATE.cart.length}</b></span>
+    </div>
+  </div>
+  <div class="chip-row" id="cat-chips">
+    ${cats.map((c,i)=>`<div class="chip ${i===0?'active':''}" onclick="filterCat('${c}',this)">${c}</div>`).join('')}
+  </div>
+  <div class="search-bar">
+    <input class="search-input" id="prod-search" placeholder="Поиск по названию или штрихкоду..." oninput="filterProducts()">
+  </div>
+  <div class="catalog-grid" id="catalog-grid">
+    ${STATE.products.map(p=>productCard(p)).join('')}
+  </div>`;
+}
+
+function productCard(p){
+  const inCart=STATE.cart.find(c=>c.barcode===p.barcode);
+  return `<div class="product-card" id="pc-${p.barcode}">
+    <div class="product-img">${p.emoji}</div>
+    <div class="product-name">${p.name}</div>
+    <div class="product-barcode">${p.barcode}</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px">
+      <div><div class="product-price">${p.price} KGS</div><div class="product-unit">за ${p.unit} ${p.vat?'(НДС '+p.vat+'%)':'(без НДС)'}</div></div>
+      ${inCart?
+        `<div class="cart-qty">
+          <button class="qty-btn" onclick="cartChange('${p.barcode}',-1)">−</button>
+          <span id="qty-${p.barcode}" style="font-weight:700;min-width:20px;text-align:center">${inCart.qty}</span>
+          <button class="qty-btn" onclick="cartChange('${p.barcode}',1)">+</button>
+        </div>`:
+        `<button class="btn btn-primary" style="padding:6px 14px;font-size:12px" onclick="addToCart('${p.barcode}')">+ В корзину</button>`
+      }
+    </div>
+  </div>`;
+}
+
+function addToCart(barcode){
+  const p=STATE.products.find(x=>x.barcode===barcode);
+  if(!p)return;
+  const ex=STATE.cart.find(c=>c.barcode===barcode);
+  if(ex){ex.qty++;}else{STATE.cart.push({...p,qty:1});}
+  updateCartSidebar();
+  refreshProductCard(barcode);
+  notify(`${p.name.substring(0,30)} добавлен в корзину`,'success');
+}
+
+function cartChange(barcode,delta){
+  const idx=STATE.cart.findIndex(c=>c.barcode===barcode);
+  if(idx===-1)return;
+  STATE.cart[idx].qty+=delta;
+  if(STATE.cart[idx].qty<=0){STATE.cart.splice(idx,1);}
+  updateCartSidebar();
+  if(STATE.page==='catalog'){refreshProductCard(barcode);}
+}
+
+function refreshProductCard(barcode){
+  const el=document.getElementById(`pc-${barcode}`);
+  if(!el)return;
+  const p=STATE.products.find(x=>x.barcode===barcode);
+  el.outerHTML=productCard(p);
+}
+
+function updateCartSidebar(){
+  const total=STATE.cart.reduce((s,c)=>s+c.price*c.qty,0);
+  const count=STATE.cart.reduce((s,c)=>s+c.qty,0);
+  const el=document.getElementById('cart-summary');
+  const btn=document.getElementById('checkout-btn');
+  const cc=document.getElementById('cart-count');
+  if(cc)cc.textContent=STATE.cart.length;
+  if(!el)return;
+  if(!STATE.cart.length){
+    el.innerHTML=`<div style="text-align:center;padding:20px;color:var(--light);font-size:13px">Корзина пуста</div>`;
+    if(btn)btn.style.display='none';
+    return;
+  }
+  el.innerHTML=`
+    <div style="font-size:12px;font-weight:700;color:var(--mid);margin-bottom:8px">КОРЗИНА (${count} поз.)</div>
+    ${STATE.cart.map(c=>`<div class="cart-item">
+      <div class="cart-item-name">${c.name.substring(0,28)}... <span style="color:var(--g);font-weight:700">${c.qty}</span></div>
+      <div style="font-size:12px;font-weight:700">${(c.price*c.qty).toFixed(0)} KGS</div>
+    </div>`).join('')}
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px">
+      <span style="font-size:12px;color:var(--mid)">Итого:</span>
+      <span class="cart-total" style="margin:0">${total.toFixed(2)} KGS</span>
+    </div>`;
+  if(btn)btn.style.display='flex';
+}
+
+function filterCat(cat,el){
+  document.querySelectorAll('#cat-chips .chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  const grid=document.getElementById('catalog-grid');
+  if(!grid)return;
+  const search=document.getElementById('prod-search')?.value.toLowerCase()||'';
+  const filtered=STATE.products.filter(p=>(cat==='Все'||p.category===cat)&&(p.name.toLowerCase().includes(search)||p.barcode.includes(search)));
+  grid.innerHTML=filtered.map(p=>productCard(p)).join('');
+}
+
+function filterProducts(){
+  const search=document.getElementById('prod-search')?.value.toLowerCase()||'';
+  const active=document.querySelector('#cat-chips .chip.active');
+  const cat=active?active.textContent:'Все';
+  const filtered=STATE.products.filter(p=>(cat==='Все'||p.category===cat)&&(p.name.toLowerCase().includes(search)||p.barcode.includes(search)));
+  const grid=document.getElementById('catalog-grid');
+  if(grid)grid.innerHTML=filtered.map(p=>productCard(p)).join('');
+}
+
+// ============================================================
+// CLIENT — ORDERS
+// ============================================================
+function renderClientOrders(){
+  const c=STATE.clients.find(x=>x.code===STATE.user.clientCode);
+  const myOrders=STATE.orders.filter(o=>o.client===c.code);
+  if(!myOrders.length) return `<div class="empty-state"><div class="icon">📋</div><p>У вас ещё нет заказов</p><br><button class="btn btn-primary" onclick="showPage('catalog')">Создать первый заказ</button></div>`;
+  return `
+  <div class="card-header" style="margin-bottom:16px"><h2 class="card-title">Мои заказы</h2></div>
+  <div class="card">
+    <table class="tbl"><thead><tr><th>Номер заказа</th><th>Дата</th><th>Статус</th><th>Позиций</th><th>Сумма</th><th></th></tr></thead><tbody>
+    ${myOrders.map(o=>`<tr>
+      <td class="fw-bold">${o.id}</td>
+      <td>${o.date}</td>
+      <td>${statusBadge(o.status)}</td>
+      <td>${o.items.length}</td>
+      <td class="fw-bold">${o.total.toFixed(2)} KGS</td>
+      <td><button class="action-btn" onclick="openOrderDetail('${o.id}')">Подробнее</button></td>
+    </tr>`).join('')}
+    </tbody></table>
+  </div>`;
+}
+
+// ============================================================
+// CLIENT — PROFILE
+// ============================================================
+function renderClientProfile(){
+  const c=STATE.clients.find(x=>x.code===STATE.user.clientCode)||STATE.clients[2];
+  const expires=parseDate(c.proxy_expires);
+  const now=new Date();
+  const daysLeft=Math.round((expires-now)/(1000*60*60*24));
+  const proxyWarn=daysLeft<14;
+  return `
+  <div class="card-header" style="margin-bottom:16px"><h2 class="card-title">Профиль организации</h2></div>
+  ${proxyWarn?`<div class="info-block ${daysLeft<7?'error':'warning'}">
+    <strong>${daysLeft<7?'🔴 Срочно: доверенность истекает менее чем через 7 дней!':'⚠️ Доверенность истекает через '+daysLeft+' дней'}</strong>
+    <p>Обновите доверенность до ${c.proxy_expires}. Обратитесь к вашему менеджеру.</p>
+  </div>`:''}
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title" style="margin-bottom:16px">🏢 Реквизиты</div>
+      ${profileRow('Код клиента',c.code)}
+      ${profileRow('Организация',c.org)}
+      ${profileRow('ИНН',c.inn)}
+      ${profileRow('Код контрагента 1С',c.code1c)}
+      ${profileRow('Юридический адрес',c.address)}
+    </div>
+    <div class="card">
+      <div class="card-title" style="margin-bottom:16px">💳 Условия</div>
+      ${profileRow('Способ оплаты',c.payment==='bank'?'💳 Безналичный расчёт':'💵 Наличный расчёт')}
+      ${profileRow('Статус',`<span class="badge ${c.status==='active'?'badge-active':'badge-blocked'}">${c.status==='active'?'Активен':'Заблокирован'}</span>`)}
+      ${profileRow('Срок доверенности',`<span class="${proxyWarn?'text-red':'text-green'}">${c.proxy_expires}</span>`)}
+      <div class="info-block" style="margin-top:12px"><strong>ℹ️ Способ оплаты</strong><p>Изменяется только через вашего менеджера после подписания доп. соглашения</p></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title" style="margin-bottom:16px">📞 Контакты</div>
+    ${profileRow('Email',c.email)}
+    ${profileRow('Телефон',c.phone)}
+    ${c.comment?profileRow('Комментарий менеджера',c.comment):''}
+  </div>`;
+}
+
+function profileRow(label,val){
+  return `<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f5f5f5">
+    <span style="color:var(--mid);font-size:13px">${label}</span>
+    <span style="font-weight:600;font-size:13px">${val}</span>
+  </div>`;
+}
+
+// ============================================================
+// CHECKOUT
+// ============================================================
+function startCheckout(){
+  if(!STATE.cart.length){notify('Корзина пуста','error');return;}
+  STATE.checkoutStep=1;
+  STATE.checkoutData={};
+  showPage('checkout');
+}
+
+function renderCheckout(){
+  const step=STATE.checkoutStep;
+  const steps=['Корзина','Реквизиты','Доверенность','Подтверждение'];
+  const c=STATE.clients.find(x=>x.code===STATE.user.clientCode)||STATE.clients[2];
+  const total=STATE.cart.reduce((s,c)=>s+c.price*c.qty,0);
+
+  return `
+  <div class="card-header" style="margin-bottom:16px"><h2 class="card-title">Оформление заказа</h2></div>
+  <div class="order-steps">
+    ${steps.map((s,i)=>`<div class="step ${i<step-1?'done':i===step-1?'active':''}">
+      <div class="step-dot">${i<step-1?'✓':i+1}</div>
+      <div class="step-label">${s}</div>
+    </div>`).join('')}
+  </div>
+  ${step===1?renderCheckoutStep1(total):step===2?renderCheckoutStep2(c):step===3?renderCheckoutStep3(c):renderCheckoutStep4(c,total)}`;
+}
+
+function renderCheckoutStep1(total){
+  return `
+  <div class="card">
+    <div class="card-title" style="margin-bottom:16px">📦 Состав заказа</div>
+    <table class="tbl"><thead><tr><th>Товар</th><th>Штрихкод</th><th>Цена</th><th>Кол-во</th><th>НДС</th><th>Сумма</th></tr></thead><tbody>
+    ${STATE.cart.map(i=>`<tr>
+      <td>${i.name}</td><td style="font-family:monospace;font-size:12px">${i.barcode}</td>
+      <td>${i.price} KGS</td>
+      <td><div class="cart-qty"><button class="qty-btn" onclick="cartChange('${i.barcode}',-1);showPage('checkout')">−</button><span>${i.qty}</span><button class="qty-btn" onclick="cartChange('${i.barcode}',1);showPage('checkout')">+</button></div></td>
+      <td>${i.vat?i.vat+'%':'0%'}</td>
+      <td class="fw-bold">${(i.price*i.qty).toFixed(2)} KGS</td>
+    </tr>`).join('')}
+    </tbody></table>
+    <div style="text-align:right;padding:16px 0;font-size:18px;font-weight:800">Итого: ${total.toFixed(2)} KGS</div>
+    <div class="info-block warning"><strong>⏰ Правило дедлайна</strong>
+    <p>Заказы до 11:00 — доставка сегодня. После 11:00 — завтра.</p></div>
+    <div style="display:flex;justify-content:flex-end;gap:12px;margin-top:16px">
+      <button class="btn btn-secondary" onclick="showPage('catalog')">← Изменить</button>
+      <button class="btn btn-primary" onclick="nextCheckoutStep()">Далее →</button>
+    </div>
+  </div>`;
+}
+
+function renderCheckoutStep2(c){
+  const d=STATE.checkoutData;
+  const dir=c.director||{};
+  const acc=c.accountant||{};
+  const buy=c.buyer||{};
+  return `
+  <div class="card">
+    <div class="card-title" style="margin-bottom:16px">👥 Контактные лица и адрес доставки</div>
+    <div class="info-block"><strong>Данные подтянуты из профиля клиента</strong>
+      <p>Поля уже заполнены по карточке организации. Клиент может скорректировать контактные лица и адрес доставки перед отправкой заказа.</p>
+    </div>
+    <div class="form-section">
+      <div class="form-section-title">Контактные лица</div>
+      <div class="form-row">
+        <div class="form-group"><label>ФИО руководителя <span class="required">*</span></label>
+          <input type="text" id="co-dir-name" value="${d.dirName||dir.name||''}" placeholder="Иванов Иван Иванович"></div>
+        <div class="form-group"><label>Телефон руководителя <span class="required">*</span></label>
+          <input type="text" id="co-dir-phone" value="${d.dirPhone||dir.phone||c.phone||''}" placeholder="+996 XXX XXX XXX"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>ФИО бухгалтера <span class="required">*</span></label>
+          <input type="text" id="co-acc-name" value="${d.accName||acc.name||''}" placeholder="Петрова Анна"></div>
+        <div class="form-group"><label>Телефон бухгалтера <span class="required">*</span></label>
+          <input type="text" id="co-acc-phone" value="${d.accPhone||acc.phone||''}" placeholder="+996 XXX XXX XXX"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>ФИО закупщика <span class="required">*</span></label>
+          <input type="text" id="co-buy-name" value="${d.buyName||buy.name||''}" placeholder="Сидоров Сергей"></div>
+        <div class="form-group"><label>Телефон закупщика <span class="required">*</span></label>
+          <input type="text" id="co-buy-phone" value="${d.buyPhone||buy.phone||''}" placeholder="+996 XXX XXX XXX"></div>
+      </div>
+    </div>
+    <div class="form-section">
+      <div class="form-section-title">Адрес доставки</div>
+      <div class="form-group"><label>Адрес <span class="required">*</span></label>
+        <textarea id="co-address" rows="3" placeholder="г. Бишкек, ул. Фрунзе, д. 15, офис 2">${d.address||c.address||c.legal_address||''}</textarea></div>
+    </div>
+    <div class="form-section">
+      <div class="form-section-title">Оплата</div>
+      <div class="info-block warning"><strong>Способ оплаты берётся из 1С</strong><p>Клиент не меняет способ оплаты в заказе. Для изменения условий нужно обратиться к менеджеру.</p></div>
+      <div class="form-group">
+        <label>Способ оплаты</label>
+        <input type="hidden" name="payment" value="${c.payment||'bank'}" checked>
+        <input type="text" value="${(c.payment||'bank')==='bank'?'Безналичный расчёт':'Наличный расчёт'}" readonly style="background:#f8f8f8">
+      </div>
+    </div>
+    <div style="display:flex;justify-content:space-between;gap:12px;margin-top:16px">
+      <button class="btn btn-secondary" onclick="STATE.checkoutStep=1;showPage('checkout')">← Назад</button>
+      <button class="btn btn-primary" onclick="saveStep2()">Далее →</button>
+    </div>
+  </div>`;
+}
+
+function selectPayment(val){
+  document.getElementById('pay-bank-label').style.borderColor=val==='bank'?'var(--g)':'var(--border)';
+  document.getElementById('pay-cash-label').style.borderColor=val==='cash'?'var(--g)':'var(--border)';
+}
+
+function saveStep2(){
+  const f=n=>document.getElementById(n)?.value.trim();
+  if(!f('co-dir-name')||!f('co-dir-phone')||!f('co-acc-name')||!f('co-address')){
+    notify('Заполните все обязательные поля','error');return;
+  }
+  STATE.checkoutData={...STATE.checkoutData,
+    dirName:f('co-dir-name'),dirPhone:f('co-dir-phone'),
+    accName:f('co-acc-name'),accPhone:f('co-acc-phone'),
+    buyName:f('co-buy-name')||'—',buyPhone:f('co-buy-phone')||'—',
+    address:f('co-address'),
+    payment:document.querySelector('input[name="payment"]')?.value||'bank',
+  };
+  STATE.checkoutStep=3;showPage('checkout');
+}
+
+function renderCheckoutStep3(c){
+  const d=STATE.checkoutData;
+  const proxy=c?.proxy||{};
+  const currentFile=d.proxyFile||proxy.file||'';
+  return `
+  <div class="card">
+    <div class="card-title" style="margin-bottom:16px">📑 Доверенное лицо</div>
+    <div class="info-block"><strong>Данные подтянуты из профиля клиента</strong>
+    <p>Клиент может оставить доверенное лицо из профиля или скорректировать данные под конкретный заказ. Оригинал доверенности и паспорт обязательны при получении.</p></div>
+    <div class="form-row">
+      <div class="form-group"><label>ФИО получателя <span class="required">*</span></label>
+        <input type="text" id="pr-name" value="${d.proxyName||proxy.name||''}" placeholder="Сидоров Сергей Сергеевич"></div>
+      <div class="form-group"><label>Номер доверенности <span class="required">*</span></label>
+        <input type="text" id="pr-num" value="${d.proxyNum||proxy.num||''}" placeholder="ДВ-125/26"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Срок действия (до) <span class="required">*</span></label>
+        <input type="date" id="pr-date" value="${d.proxyDate||dateToInput(proxy.valid||c?.proxy_expires)||''}"></div>
+      <div class="form-group">
+        <label>Скан-копия доверенности <span class="required">*</span></label>
+        <div class="file-upload-area ${currentFile?'has-file':''}" onclick="fakeFileUpload()">
+          <div style="font-size:24px;margin-bottom:6px">${currentFile?'✅':'📎'}</div>
+          <div style="font-size:13px;font-weight:600">${currentFile?currentFile:'Нажмите для загрузки файла'}</div>
+          <div style="font-size:11px;color:var(--light);margin-top:4px">PDF, JPG, PNG — до 10 МБ</div>
+          ${currentFile?'<div class="progress-bar" style="margin-top:8px"><div class="progress-fill" style="width:100%"></div></div>':''}
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:space-between;gap:12px;margin-top:16px">
+      <button class="btn btn-secondary" onclick="STATE.checkoutStep=2;showPage('checkout')">← Назад</button>
+      <button class="btn btn-primary" onclick="saveStep3()">Далее →</button>
+    </div>
+  </div>`;
+}
+
+function fakeFileUpload(){
+  STATE.checkoutData.proxyFile='доверенность_'+Date.now()+'.pdf';
+  showPage('checkout');
+  notify('Файл загружен','success');
+}
+
+function saveStep3(){
+  const f=n=>document.getElementById(n)?.value.trim();
+  if(!f('pr-name')||!f('pr-num')||!f('pr-date')){notify('Заполните данные доверенности','error');return;}
+  const c=STATE.clients.find(x=>x.code===STATE.user.clientCode)||STATE.clients[2];
+  const profileFile=c?.proxy?.file||'';
+  if(!STATE.checkoutData.proxyFile && profileFile){STATE.checkoutData.proxyFile=profileFile;}
+  if(!STATE.checkoutData.proxyFile){notify('Загрузите скан-копию доверенности','error');return;}
+  STATE.checkoutData={...STATE.checkoutData,proxyName:f('pr-name'),proxyNum:f('pr-num'),proxyDate:f('pr-date')};
+  STATE.checkoutStep=4;showPage('checkout');
+}
+
+function renderCheckoutStep4(c,total){
+  const d=STATE.checkoutData;
+  return `
+  <div class="card">
+    <div class="card-title" style="margin-bottom:16px">✅ Подтверждение заказа</div>
+    <div class="grid-2">
+      <div>
+        <div class="form-section-title" style="margin-bottom:12px">Доставка</div>
+        ${profileRow('Адрес',d.address)}
+        ${profileRow('Способ оплаты',d.payment==='bank'?'💳 Безналичный':'💵 Наличный')}
+        <div class="form-section-title" style="margin-top:16px;margin-bottom:12px">Контакты</div>
+        ${profileRow('Руководитель',d.dirName+' '+d.dirPhone)}
+        ${profileRow('Бухгалтер',d.accName+' '+d.accPhone)}
+        ${profileRow('Закупщик',d.buyName+' '+d.buyPhone)}
+      </div>
+      <div>
+        <div class="form-section-title" style="margin-bottom:12px">Доверенное лицо</div>
+        ${profileRow('ФИО',d.proxyName)}
+        ${profileRow('Номер доверенности',d.proxyNum)}
+        ${profileRow('Срок действия',d.proxyDate)}
+        ${profileRow('Файл',d.proxyFile||'—')}
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div style="margin-bottom:12px"><div class="form-section-title">Состав заказа</div></div>
+    <table class="tbl"><thead><tr><th>Товар</th><th>Кол-во</th><th>Сумма</th></tr></thead><tbody>
+    ${STATE.cart.map(i=>`<tr><td>${i.name}</td><td>${i.qty} ${i.unit}</td><td class="fw-bold">${(i.price*i.qty).toFixed(2)} KGS</td></tr>`).join('')}
+    </tbody></table>
+    <div style="text-align:right;font-size:20px;font-weight:800;padding:16px 0">ИТОГО: ${total.toFixed(2)} KGS</div>
+    <div class="info-block warning"><strong>⚠️ После подтверждения заказ передаётся в 1С</strong>
+    <p>Убедитесь в правильности всех данных перед отправкой</p></div>
+    <div style="display:flex;justify-content:space-between;gap:12px;margin-top:16px">
+      <button class="btn btn-secondary" onclick="STATE.checkoutStep=3;showPage('checkout')">← Назад</button>
+      <button class="btn btn-primary" style="padding:12px 32px;font-size:15px" onclick="submitOrder()">📨 Подтвердить заказ</button>
+    </div>
+  </div>`;
+}
+
+function submitOrder(){
+  const c=STATE.clients.find(x=>x.code===STATE.user.clientCode)||STATE.clients[2];
+  const d=STATE.checkoutData;
+  const total=STATE.cart.reduce((s,c)=>s+c.price*c.qty,0);
+  const newOrder={
+    id:'ЗКК-2026-00'+(42+STATE.orders.length),
+    client:c.code,clientName:c.org,inn:c.inn,
+    date:new Date().toLocaleString('ru',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}),
+    status:'new',
+    items:[...STATE.cart],
+    address:d.address,
+    proxy:{name:d.proxyName,num:d.proxyNum,validUntil:d.proxyDate,file:d.proxyFile},
+    contacts:{director:{name:d.dirName,phone:d.dirPhone},accountant:{name:d.accName,phone:d.accPhone},buyer:{name:d.buyName,phone:d.buyPhone}},
+    payment:d.payment,total,market:'Глобус-11',code1c:c.code1c,
+  };
+  STATE.orders.unshift(newOrder);
+  STATE.cart=[];
+  STATE.checkoutData={};
+  notify('🎉 Заказ '+newOrder.id+' успешно оформлен!','success');
+  showPage('orders');
+}
+
+// ============================================================
+// MANAGER — DASHBOARD
+// ============================================================
+function renderManagerDash(){
+  const orders=STATE.orders;
+  const newO=orders.filter(o=>o.status==='new').length;
+  const proc=orders.filter(o=>o.status==='processing').length;
+  const err=orders.filter(o=>o.status==='error').length;
+  const revenue=orders.filter(o=>o.status==='delivered').reduce((s,o)=>s+o.total,0);
+  return `
+  <div class="card-header" style="margin-bottom:16px"><h2 class="card-title">Дашборд корпоративных продаж</h2><div class="card-subtitle">${new Date().toLocaleDateString('ru',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}</div></div>
+  <div class="stats-row">
+    <div class="stat-card"><div class="stat-num">${orders.length}</div><div class="stat-label">Всего заказов</div><div class="stat-change">сегодня</div></div>
+    <div class="stat-card orange"><div class="stat-num">${newO+proc}</div><div class="stat-label">В работе</div><div class="stat-change">${newO} новых</div></div>
+    <div class="stat-card red"><div class="stat-num">${err}</div><div class="stat-label">Ошибки загрузки</div><div class="stat-change text-red">требуют внимания</div></div>
+    <div class="stat-card blue"><div class="stat-num">${revenue.toLocaleString('ru')} KGS</div><div class="stat-label">Выручка (доставлено)</div></div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-header"><div class="card-title">Заказы по статусам</div></div>
+      ${[['new','Новые'],['processing','В обработке'],['assembly','В сборке'],['ready','Готов к выдаче'],['delivery','Доставляется'],['delivered','Доставлен'],['error','Ошибка'],['cancelled','Отменён']].map(([s,l])=>{
+        const cnt=orders.filter(o=>o.status===s).length;
+        return cnt?`<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f5f5f5">
+          <span>${statusBadge(s)} ${l}</span><span class="fw-bold">${cnt}</span></div>`:''
+      }).join('')}
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">Последние заказы</div></div>
+      ${orders.slice(0,4).map(o=>`<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f5f5f5;cursor:pointer" onclick="showPage('admin-orders')">
+        <div><div style="font-weight:600;font-size:13px">${o.id}</div><div style="font-size:12px;color:var(--light)">${o.clientName}</div></div>
+        <div style="text-align:right">${statusBadge(o.status)}<div style="font-size:12px;font-weight:700;margin-top:4px">${o.total.toFixed(0)} KGS</div></div>
+      </div>`).join('')}
+      <button class="btn btn-secondary" style="margin-top:12px;width:100%" onclick="showPage('admin-orders')">Все заказы →</button>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-title" style="margin-bottom:12px">⚠️ Открытые вопросы (из ТЗ)</div>
+    ${[['A1','Протокол интеграции Globus Online ↔ 1С','Web + 1С'],['A2','Согласование субсчёта 1415 с бухгалтерией','1С + Бухгалтер'],['A3','Денежный порог для менеджера','Руководство'],['A4','Список пилотных клиентов','Менеджер']].map(([n,q,r])=>`
+    <div style="display:flex;align-items:center;gap:12px;padding:10px;background:#fff8e1;border-radius:8px;margin-bottom:8px">
+      <span style="background:var(--acc);color:#fff;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:700">${n}</span>
+      <span style="flex:1;font-size:13px">${q}</span>
+      <span style="font-size:12px;color:var(--mid)">${r}</span>
+      <span style="background:#ffebee;color:var(--red);padding:2px 8px;border-radius:4px;font-size:11px">Открыт</span>
+    </div>`).join('')}
+  </div>`;
+}
+
+// ============================================================
+// MANAGER — ORDERS
+// ============================================================
+function renderManagerOrders(){
+  return `
+  <div class="card-header" style="margin-bottom:16px"><h2 class="card-title">Все заказы</h2>
+  <button class="btn btn-primary" onclick="notify('Обновлено','success')">🔄 Обновить</button></div>
+  <div class="chip-row">
+    ${[['all','Все'],['new','Новые'],['processing','В обработке'],['assembly','В сборке'],['error','Ошибки']].map(([s,l])=>`
+    <div class="chip ${s==='all'?'active':''}" onclick="filterOrdersByStatus('${s}',this)">${l} (${s==='all'?STATE.orders.length:STATE.orders.filter(o=>o.status===s).length})</div>`).join('')}
+  </div>
+  <div class="card">
+    <table class="tbl" id="orders-table">
+      <thead><tr><th>Номер</th><th>Клиент</th><th>Дата</th><th>Статус</th><th>Маркет</th><th>Сумма</th><th>Действия</th></tr></thead>
+      <tbody id="orders-tbody">
+      ${STATE.orders.map(o=>orderRow(o)).join('')}
+      </tbody>
+    </table>
+  </div>`;
+}
+
+function orderRow(o){
+  return `<tr>
+    <td class="fw-bold">${o.id}</td>
+    <td><div style="font-weight:600">${o.clientName}</div><div style="font-size:11px;color:var(--light)">${o.client}</div></td>
+    <td style="font-size:12px">${o.date}</td>
+    <td>${statusBadge(o.status)}</td>
+    <td style="font-size:12px">${o.market||'—'}</td>
+    <td class="fw-bold">${o.total.toFixed(0)} KGS</td>
+    <td style="display:flex;gap:6px;flex-wrap:wrap">
+      <button class="action-btn" onclick="openOrderDetail('${o.id}')">Детали</button>
+      ${o.status==='new'?`<button class="action-btn" onclick="changeOrderStatus('${o.id}','processing')">В работу</button>`:''}
+      ${o.status==='processing'?`<button class="action-btn" onclick="changeOrderStatus('${o.id}','assembly')">→ Сборка</button>`:''}
+      ${o.status==='assembly'?`<button class="action-btn" onclick="changeOrderStatus('${o.id}','ready')">→ Готов</button>`:''}
+      ${o.status==='ready'?`<button class="action-btn" onclick="changeOrderStatus('${o.id}','delivery')">→ Доставка</button>`:''}
+      ${o.status==='delivery'?`<button class="action-btn" onclick="changeOrderStatus('${o.id}','delivered')">→ Доставлен</button>`:''}
+      ${!['delivered','cancelled','error'].includes(o.status)?`<button class="action-btn danger" onclick="changeOrderStatus('${o.id}','cancelled')">Отменить</button>`:''}
+    </td>
+  </tr>`;
+}
+
+function filterOrdersByStatus(s,el){
+  document.querySelectorAll('.chip-row .chip').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active');
+  const filtered=s==='all'?STATE.orders:STATE.orders.filter(o=>o.status===s);
+  const tb=document.getElementById('orders-tbody');
+  if(tb)tb.innerHTML=filtered.map(o=>orderRow(o)).join('');
+}
+
+function changeOrderStatus(id,newStatus){
+  const o=STATE.orders.find(x=>x.id===id);
+  if(!o)return;
+  o.status=newStatus;
+  notify(`Заказ ${id} → ${statusLabel(newStatus)}`,'success');
+  const tb=document.getElementById('orders-tbody');
+  if(tb){
+    const chips=document.querySelectorAll('.chip-row .chip');
+    const active=[...chips].find(c=>c.classList.contains('active'));
+    const s=active?.textContent.split(' ')[0]||'all';
+    const filtered=s==='Все'?STATE.orders:STATE.orders.filter(o=>o.status===s.toLowerCase());
+    tb.innerHTML=(s==='Все'?STATE.orders:filtered).map(o=>orderRow(o)).join('');
+  }
+  closeModalDirect();
+}
+
+// ============================================================
+// MANAGER — CLIENTS
+// ============================================================
+function renderManagerClients(){
+  return `
+  <div class="card-header" style="margin-bottom:16px">
+    <h2 class="card-title">Корпоративные клиенты</h2>
+    <button class="btn btn-primary" onclick="openAddClientModal()">➕ Добавить клиента</button>
+  </div>
+  <div class="search-bar">
+    <input class="search-input" placeholder="Поиск по организации, ИНН, коду 1С..." oninput="filterClients(this.value)">
+  </div>
+  <div class="card">
+    <table class="tbl" id="clients-table">
+      <thead><tr><th>Код</th><th>Организация</th><th>ИНН</th><th>Email</th><th>Код 1С</th><th>Оплата</th><th>Статус</th><th>Доверенность</th><th>Действия</th></tr></thead>
+      <tbody id="clients-tbody">
+      ${STATE.clients.map(c=>clientRow(c)).join('')}
+      </tbody>
+    </table>
+  </div>`;
+}
+
+function clientRow(c){
+  const expires=parseDate(c.proxy_expires);
+  const daysLeft=Math.round((expires-new Date())/(1000*60*60*24));
+  const proxyWarn=daysLeft<14;
+  return `<tr>
+    <td class="fw-bold text-green">${c.code}</td>
+    <td><div style="font-weight:600">${c.org}</div></td>
+    <td style="font-family:monospace;font-size:12px">${c.inn}</td>
+    <td style="font-size:12px">${c.email}</td>
+    <td style="font-family:monospace;font-weight:700">${c.code1c}</td>
+    <td><span class="badge ${c.payment==='bank'?'badge-active':'badge-processing'}">${c.payment==='bank'?'💳 Безнал':'💵 Нал'}</span></td>
+    <td>${c.status==='active'?'<span class="badge badge-active">Активен</span>':c.status==='blocked'?'<span class="badge badge-blocked">Заблокирован</span>':'<span class="badge badge-pending">На проверке</span>'}</td>
+    <td><span style="font-size:12px;color:${proxyWarn?'var(--red)':'var(--mid)'}">${c.proxy_expires}${proxyWarn?' ⚠️':''}</span></td>
+    <td style="display:flex;gap:6px">
+      <button class="action-btn" onclick="openClientDetail('${c.code}')">Карточка</button>
+      <button class="action-btn" onclick="openEditClientModal('${c.code}')">Изменить</button>
+    </td>
+  </tr>`;
+}
+
+function filterClients(q){
+  const lq=q.toLowerCase();
+  const filtered=STATE.clients.filter(c=>c.org.toLowerCase().includes(lq)||c.inn.includes(lq)||c.code1c.includes(lq)||c.code.toLowerCase().includes(lq));
+  const tb=document.getElementById('clients-tbody');
+  if(tb)tb.innerHTML=filtered.map(c=>clientRow(c)).join('');
+}
+
+function openAddClientModal(){
+  const nextCode='КК'+(STATE.clients.length+1).toString().padStart(4,'0');
+  openModal('Создание корпоративного клиента',`
+  <div class="form-section">
+    <div class="form-section-title">Основные данные</div>
+    <div class="form-row">
+      <div class="form-group"><label>Наименование организации <span class="required">*</span></label><input type="text" id="nc-org" placeholder="ОсОО / ИП / организация"></div>
+      <div class="form-group"><label>ИНН <span class="required">*</span></label><input type="text" id="nc-inn" placeholder="00000000000000" maxlength="14"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Email <span class="required">*</span></label><input type="email" id="nc-email" placeholder="email@example.kg"></div>
+      <div class="form-group"><label>Телефон <span class="required">*</span></label><input type="text" id="nc-phone" placeholder="+996 XXX XXX XXX"></div>
+    </div>
+    <div class="form-group"><label>Юридический адрес</label><input type="text" id="nc-addr" placeholder="г. Бишкек, ул. ..."></div>
+    <div class="form-group"><label>Статус <span class="required">*</span></label>
+      <select id="nc-status"><option value="active">Активен</option><option value="pending">На проверке</option><option value="blocked">Заблокирован</option></select></div>
+  </div>
+  <div class="form-section">
+    <div class="form-section-title">Данные авторизации</div>
+    <div class="form-row">
+      <div class="form-group"><label>Логин <span class="required">*</span></label><input type="text" id="nc-login" placeholder="Уникальный логин"></div>
+      <div class="form-group"><label>Пароль (временный) <span class="required">*</span></label><input type="password" id="nc-pass" placeholder="Временный пароль"></div>
+    </div>
+  </div>
+  <div class="form-section">
+    <div class="form-section-title">Данные 1С</div>
+    <div class="form-row">
+      <div class="form-group"><label>Код контрагента 1С <span class="required">*</span></label><input type="text" id="nc-code1c" placeholder="Например: 00008888"></div>
+      <div class="form-group"><label>Наименование в 1С</label><input type="text" id="nc-name1c" placeholder="Как указано в 1С"></div>
+    </div>
+    <div class="form-row">
+      <div class="form-group"><label>Способ оплаты</label>
+        <select id="nc-payment"><option value="bank">Безналичный</option><option value="cash">Наличный</option></select></div>
+      <div class="form-group"><label>Код клиента на портале</label><input type="text" value="${nextCode}" readonly style="background:#f5f5f5"></div>
+    </div>
+  </div>
+  <div class="form-group"><label>Комментарий</label><textarea id="nc-comment" rows="2" placeholder="Внутренний комментарий"></textarea></div>`,
+  [
+    {label:'Отмена',action:'closeModalDirect()',class:'btn-secondary'},
+    {label:'Создать клиента',action:'saveNewClient()',class:'btn-primary'},
+  ]);
+}
+
+function saveNewClient(){
+  const f=id=>document.getElementById(id)?.value.trim();
+  if(!f('nc-org')||!f('nc-inn')||!f('nc-email')||!f('nc-login')||!f('nc-code1c')){
+    notify('Заполните все обязательные поля','error');return;
+  }
+  const nextCode='КК'+(STATE.clients.length+1).toString().padStart(4,'0');
+  STATE.clients.push({
+    code:nextCode,org:f('nc-org'),inn:f('nc-inn'),email:f('nc-email'),phone:f('nc-phone'),
+    login:f('nc-login'),code1c:f('nc-code1c'),name1c:f('nc-name1c'),
+    payment:document.getElementById('nc-payment').value,
+    status:document.getElementById('nc-status').value,
+    address:f('nc-addr'),comment:f('nc-comment'),proxy_expires:'01.01.2027',
+  });
+  USERS[f('nc-login')]={pass:f('nc-pass')||'1234',role:'client',clientCode:nextCode,name:f('nc-org')};
+  notify('Клиент '+nextCode+' создан!','success');
+  closeModalDirect();
+  showPage('admin-clients');
+}
+
+function openEditClientModal(code){
+  const c=STATE.clients.find(x=>x.code===code);
+  if(!c)return;
+  openModal('Редактирование: '+c.org,`
+  <div class="form-row">
+    <div class="form-group"><label>Организация</label><input type="text" id="ec-org" value="${c.org}"></div>
+    <div class="form-group"><label>ИНН</label><input type="text" id="ec-inn" value="${c.inn}"></div>
+  </div>
+  <div class="form-row">
+    <div class="form-group"><label>Email</label><input type="email" id="ec-email" value="${c.email}"></div>
+    <div class="form-group"><label>Телефон</label><input type="text" id="ec-phone" value="${c.phone}"></div>
+  </div>
+  <div class="form-row">
+    <div class="form-group"><label>Код 1С</label><input type="text" id="ec-code1c" value="${c.code1c}"></div>
+    <div class="form-group"><label>Статус</label>
+      <select id="ec-status">
+        <option value="active" ${c.status==='active'?'selected':''}>Активен</option>
+        <option value="pending" ${c.status==='pending'?'selected':''}>На проверке</option>
+        <option value="blocked" ${c.status==='blocked'?'selected':''}>Заблокирован</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group"><label>Способ оплаты (только просмотр)</label>
+      <input type="text" value="${c.payment==='bank'?'Безналичный расчёт':'Наличный расчёт'}" readonly style="background:#f5f5f5"></div>
+    <div class="form-group"><label>Срок доверенности</label><input type="date" id="ec-proxy" value="${dateToInput(c.proxy_expires)}"></div>
+  </div>
+  <div class="form-group"><label>Комментарий</label><textarea id="ec-comment" rows="2">${c.comment}</textarea></div>`,
+  [
+    {label:'Отмена',action:'closeModalDirect()',class:'btn-secondary'},
+    {label:'Сохранить',action:`saveEditClient('${code}')`,class:'btn-primary'},
+  ]);
+}
+
+function saveEditClient(code){
+  const c=STATE.clients.find(x=>x.code===code);
+  if(!c)return;
+  c.org=document.getElementById('ec-org').value;
+  c.inn=document.getElementById('ec-inn').value;
+  c.email=document.getElementById('ec-email').value;
+  c.phone=document.getElementById('ec-phone').value;
+  c.code1c=document.getElementById('ec-code1c').value;
+  c.status=document.getElementById('ec-status').value;
+  c.comment=document.getElementById('ec-comment').value;
+  const pd=document.getElementById('ec-proxy')?.value;
+  if(pd)c.proxy_expires=inputToDate(pd);
+  notify('Клиент '+code+' обновлён','success');
+  closeModalDirect();
+  showPage('admin-clients');
+}
+
+function openClientDetail(code){
+  const c=STATE.clients.find(x=>x.code===code);
+  if(!c)return;
+  const orders=STATE.orders.filter(o=>o.client===code);
+  openModal('Карточка клиента: '+c.org,`
+  <div class="grid-2">
+    <div>
+      ${profileRow('Код',c.code)}${profileRow('ИНН',c.inn)}${profileRow('Код 1С',c.code1c)}
+      ${profileRow('Логин',c.login)}${profileRow('Статус',c.status)}
+    </div>
+    <div>
+      ${profileRow('Email',c.email)}${profileRow('Телефон',c.phone)}
+      ${profileRow('Оплата',c.payment==='bank'?'Безналичный':'Наличный')}
+      ${profileRow('Доверенность до',c.proxy_expires)}
+    </div>
+  </div>
+  <div class="divider"></div>
+  <div class="card-title" style="margin-bottom:12px">История заказов (${orders.length})</div>
+  ${orders.length?`<table class="tbl"><thead><tr><th>Заказ</th><th>Дата</th><th>Статус</th><th>Сумма</th></tr></thead><tbody>
+  ${orders.map(o=>`<tr><td class="fw-bold">${o.id}</td><td>${o.date}</td><td>${statusBadge(o.status)}</td><td>${o.total.toFixed(0)} KGS</td></tr>`).join('')}
+  </tbody></table>`:`<div class="empty-state" style="padding:20px"><p>Заказов нет</p></div>`}`,
+  [{label:'Закрыть',action:'closeModalDirect()',class:'btn-secondary'},{label:'Редактировать',action:`closeModalDirect();openEditClientModal('${code}')`,class:'btn-primary'}]);
+}
+
+// ============================================================
+// 1C OPERATOR
+// ============================================================
+function render1cOrders(){
+  const pending=STATE.orders.filter(o=>['new','processing'].includes(o.status));
+  return `
+  <div class="card-header" style="margin-bottom:16px">
+    <div><h2 class="card-title">Рабочий стол 1С — Входящие заказы</h2>
+    <div class="card-subtitle">Последний обмен: ${new Date().toLocaleString('ru')}</div></div>
+    <button class="btn btn-primary" onclick="simulateSync()">🔄 Синхронизировать</button>
+  </div>
+  <div class="info-block"><strong>ℹ️ Протокол интеграции</strong><p>Формат и расписание обмена: TBD — требует согласования между Web-командой и 1С-разработчиком (см. Открытый вопрос A1)</p></div>
+  <div class="card">
+    <div class="card-title" style="margin-bottom:16px">Заказы, ожидающие обработки в 1С</div>
+    <table class="tbl"><thead><tr><th>Операция</th><th>Дата</th><th>Номер с сайта</th><th>Статус</th><th>Позиций</th><th>Сумма</th><th>Оплачен</th><th>Действия</th></tr></thead>
+    <tbody>
+    ${STATE.orders.map(o=>`<tr>
+      <td style="font-size:12px;color:var(--mid)">Заказ покупателя</td>
+      <td style="font-size:12px">${o.date}</td>
+      <td class="fw-bold">${o.id}</td>
+      <td>${statusBadge(o.status)}</td>
+      <td>${o.items.length}</td>
+      <td class="fw-bold">${o.total.toFixed(2)} KGS</td>
+      <td>${o.payment==='bank'?'<span style="color:var(--blue)">💳</span>':'<span style="color:var(--acc)">💵</span>'}</td>
+      <td style="display:flex;gap:6px">
+        <button class="action-btn" onclick="open1cOrderDetail('${o.id}')">Открыть</button>
+        ${o.status==='new'?`<button class="action-btn" onclick="accept1cOrder('${o.id}')">✅ Принять</button>`:''}
+      </td>
+    </tr>`).join('')}
+    </tbody></table>
+  </div>`;
+}
+
+function simulateSync(){
+  notify('Синхронизация... Получено '+STATE.orders.filter(o=>o.status==='new').length+' новых заказов','success');
+}
+
+function accept1cOrder(id){
+  const o=STATE.orders.find(x=>x.id===id);
+  if(!o)return;
+  o.status='processing';
+  notify('Заказ '+id+' принят в 1С. Создан Заказ покупателя.','success');
+  showPage('1c-orders');
+}
+
+function open1cOrderDetail(id){
+  const o=STATE.orders.find(x=>x.id===id);
+  if(!o)return;
+  const totals={noVat:0,vat:0,alco:0};
+  o.items.forEach(i=>{
+    const s=i.price*i.qty;
+    if(i.vat===0)totals.noVat+=s;
+    else totals.vat+=s;
+  });
+  openModal('Заказ покупателя '+o.id,`
+  <div class="grid-2">
+    <div>
+      <div class="form-section-title" style="margin-bottom:8px">Контрагент</div>
+      ${profileRow('Наименование',o.clientName)}
+      ${profileRow('ИНН',o.inn)}
+      ${profileRow('Код 1С',o.code1c)}
+      ${profileRow('Способ оплаты',o.payment==='bank'?'Безналичный расчёт':'Наличный расчёт')}
+      ${profileRow('Маркет',o.market||'—')}
+    </div>
+    <div>
+      <div class="form-section-title" style="margin-bottom:8px">Доверенное лицо</div>
+      ${profileRow('ФИО',o.proxy.name||'—')}
+      ${profileRow('№ доверенности',o.proxy.num||'—')}
+      ${profileRow('Действует до',o.proxy.validUntil||'—')}
+      ${profileRow('Файл',o.proxy.file||'—')}
+    </div>
+  </div>
+  <div class="divider"></div>
+  <div class="form-section-title" style="margin-bottom:8px">Позиции заказа</div>
+  <table class="tbl"><thead><tr><th>Товар</th><th>Штрихкод</th><th>Кол-во</th><th>Цена</th><th>НДС</th><th>Сумма</th></tr></thead>
+  <tbody>${o.items.map(i=>`<tr>
+    <td>${i.name}</td><td style="font-family:monospace;font-size:11px">${i.barcode}</td>
+    <td>${i.qty} ${i.unit}</td><td>${i.price}</td><td>${i.vat?i.vat+'%':'0%'}</td>
+    <td class="fw-bold">${(i.price*i.qty).toFixed(2)}</td>
+  </tr>`).join('')}</tbody></table>
+  <div class="divider"></div>
+  <div class="form-section-title" style="margin-bottom:8px">Разделение на накладные (автоматически)</div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+    <div style="background:var(--g3);border-radius:8px;padding:14px;text-align:center">
+      <div style="font-size:12px;font-weight:700;color:var(--g);margin-bottom:4px">Накладная 1</div>
+      <div style="font-size:11px;color:var(--mid)">Товары без НДС</div>
+      <div style="font-size:18px;font-weight:800;margin-top:8px">${totals.noVat.toFixed(2)} KGS</div>
+    </div>
+    <div style="background:#e3f2fd;border-radius:8px;padding:14px;text-align:center">
+      <div style="font-size:12px;font-weight:700;color:var(--blue);margin-bottom:4px">Накладная 2</div>
+      <div style="font-size:11px;color:var(--mid)">Товары с НДС 12%</div>
+      <div style="font-size:18px;font-weight:800;margin-top:8px">${totals.vat.toFixed(2)} KGS</div>
+    </div>
+    <div style="background:#fff3e0;border-radius:8px;padding:14px;text-align:center">
+      <div style="font-size:12px;font-weight:700;color:var(--acc);margin-bottom:4px">Накладная 3</div>
+      <div style="font-size:11px;color:var(--mid)">Алко / Табак</div>
+      <div style="font-size:18px;font-weight:800;margin-top:8px">${totals.alco.toFixed(2)} KGS</div>
+    </div>
+  </div>
+  <div class="divider"></div>
+  ${profileRow('Бухгалтерский счёт','1415 «Расчёты с корп. клиентами через интернет-магазин»')}
+  `,
+  [
+    {label:'Закрыть',action:'closeModalDirect()',class:'btn-secondary'},
+    {label:'Провести в 1С',action:`accept1cOrder('${o.id}');closeModalDirect()`,class:'btn-primary'},
+    {label:'Печать накладной',action:`printInvoice('${o.id}')`,class:'btn-orange'},
+  ]);
+}
+
+function printInvoice(id){
+  const o=STATE.orders.find(x=>x.id===id);
+  if(!o)return;
+  const total=o.items.reduce((s,i)=>s+i.price*i.qty,0);
+  const vatSum=o.items.reduce((s,i)=>s+(i.price*i.qty*i.vat/100/(1+i.vat/100)),0);
+  const win=window.open('','_blank','width=900,height=700');
+  win.document.write(`<!DOCTYPE html><html lang="ru"><head><meta charset="UTF-8"><title>Накладная ${o.id}</title>
+  <style>body{font-family:Arial,sans-serif;font-size:11px;padding:20px;color:#000}
+  h2{font-size:13px;text-align:center;margin-bottom:16px}
+  .header-block{display:flex;justify-content:space-between;margin-bottom:16px}
+  .info-table{width:100%;border-collapse:collapse;margin-bottom:16px}
+  .info-table td{padding:4px 8px;border:1px solid #ccc;vertical-align:top}
+  table.items{width:100%;border-collapse:collapse;margin-bottom:16px}
+  table.items th{background:#eee;padding:5px 6px;border:1px solid #ccc;font-size:10px}
+  table.items td{padding:4px 6px;border:1px solid #ccc}
+  .totals{text-align:right;margin-bottom:20px}
+  .sign-row{display:flex;justify-content:space-between;margin-top:30px}
+  .sign-box{width:45%;border-top:1px solid #000;padding-top:4px;font-size:10px}
+  .proxy-box{border:1px solid #f57c00;padding:10px;margin-top:12px;background:#fff8e1}
+  </style></head><body>
+  <div style="text-align:left;font-size:10px;margin-bottom:8px">
+    Хоз. операция: Реализация товаров через интернет-магазин корпоративным клиентам<br>
+    Бух. счёт: 1415 «Расчёты с корп. клиентами через интернет-магазин»
+  </div>
+  <h2>РАСХОДНАЯ НАКЛАДНАЯ № ${o.id} от ${o.date}</h2>
+  <div class="header-block">
+    <table class="info-table" style="width:48%">
+      <tr><td style="background:#eee"><b>ПОЛУЧАТЕЛЬ (КОРП. КЛИЕНТ)</b></td></tr>
+      <tr><td><b>${o.clientName}</b></td></tr>
+      <tr><td>ИНН: ${o.inn}</td></tr>
+      <tr><td>Адрес доставки: ${o.address}</td></tr>
+      ${o.contacts?.director?`<tr><td>Руководитель: ${o.contacts.director.name} ${o.contacts.director.phone}</td></tr>`:''}
+      ${o.contacts?.accountant?`<tr><td>Бухгалтер: ${o.contacts.accountant.name} ${o.contacts.accountant.phone}</td></tr>`:''}
+      ${o.contacts?.buyer?`<tr><td>Закупщик: ${o.contacts.buyer.name} ${o.contacts.buyer.phone}</td></tr>`:''}
+    </table>
+    <table class="info-table" style="width:48%">
+      <tr><td style="background:#fff3cd"><b>ДОВЕРЕННОЕ ЛИЦО ДЛЯ ПОЛУЧЕНИЯ ЗАКАЗА</b></td></tr>
+      <tr><td>ФИО: <b>${o.proxy.name||'—'}</b></td></tr>
+      <tr><td>Номер доверенности: ${o.proxy.num||'—'}</td></tr>
+      <tr><td>Срок действия: ${o.proxy.validUntil||'—'}</td></tr>
+      <tr><td>Кем выдана: ${o.clientName}</td></tr>
+      <tr><td>Скан-копия: ${o.proxy.file||'—'}</td></tr>
+    </table>
+  </div>
+  <table class="items"><thead><tr><th>№</th><th>Товар</th><th>Штрихкод</th><th>Ед.</th><th>Кол-во</th><th>Цена</th><th>Сумма без скидки</th><th>Скидка</th><th>НДС %</th><th>Сумма НДС</th><th>Сумма НСП</th><th>Сумма</th></tr></thead>
+  <tbody>${o.items.map((i,n)=>{
+    const s=i.price*i.qty;
+    const vatAmt=(s*i.vat/100/(1+i.vat/100)).toFixed(2);
+    return `<tr><td>${n+1}</td><td>${i.name}</td><td style="font-family:monospace;font-size:9px">${i.barcode}</td><td>${i.unit}</td><td>${i.qty}</td><td>${i.price}</td><td>${s.toFixed(2)}</td><td>—</td><td>${i.vat}%</td><td>${vatAmt}</td><td>1.00</td><td>${s.toFixed(2)}</td></tr>`;
+  }).join('')}</tbody></table>
+  <div class="totals">
+    <div>Всего наименований: ${o.items.length} на сумму ${total.toFixed(2)} KGS</div>
+    <div><b>В том числе НДС (12%): ${vatSum.toFixed(2)} KGS</b></div>
+    <div style="font-size:16px;font-weight:bold;margin-top:8px">ИТОГО: ${total.toFixed(2)} KGS</div>
+  </div>
+  <div class="sign-row">
+    <div class="sign-box">Отпустил ______________________ <br>ОсОО «Умай Групп»</div>
+    <div class="sign-box">Получил ______________________ <br>${o.proxy.name||'_______________'}</div>
+    <div class="sign-box">Курьер ______________________ </div>
+  </div>
+  <div class="proxy-box">⚠️ Доверенность № ${o.proxy.num||'—'} &nbsp;&nbsp; Срок действия: ${o.proxy.validUntil||'—'}</div>
+  <p style="font-size:9px;margin-top:16px;color:#888">Отправитель: ОсОО «Умай Групп» &nbsp;&nbsp; Магазин: ${o.market} &nbsp;&nbsp; Способ доставки: Курьером &nbsp;&nbsp; Способ оплаты: ${o.payment==='bank'?'Безналичный':'Наличный'}</p>
+  </body></html>`);
+  win.document.close();
+  win.print();
+  notify('Накладная открыта для печати','success');
+}
+
+function render1cDocs(){
+  const done=STATE.orders.filter(o=>o.status==='delivered');
+  return `
+  <div class="card-header" style="margin-bottom:16px"><h2 class="card-title">Документы — реализации</h2></div>
+  <div class="card">
+    <table class="tbl"><thead><tr><th>Документ</th><th>Клиент</th><th>Дата</th><th>Накладная 1 (без НДС)</th><th>Накладная 2 (НДС 12%)</th><th>Накладная 3 (Алко)</th><th>Счёт</th><th></th></tr></thead>
+    <tbody>
+    ${STATE.orders.map(o=>{
+      const noVat=o.items.filter(i=>i.vat===0).reduce((s,i)=>s+i.price*i.qty,0);
+      const withVat=o.items.filter(i=>i.vat>0).reduce((s,i)=>s+i.price*i.qty,0);
+      return `<tr>
+        <td><div class="fw-bold">${o.id}</div><div style="font-size:11px;color:var(--mid)">Реализация через ИМ</div></td>
+        <td style="font-size:12px">${o.clientName}</td>
+        <td style="font-size:12px">${o.date}</td>
+        <td>${noVat>0?`<span class="badge badge-active">${noVat.toFixed(0)} KGS</span>`:'<span style="color:var(--light);font-size:11px">—</span>'}</td>
+        <td>${withVat>0?`<span class="badge badge-new">${withVat.toFixed(0)} KGS</span>`:'<span style="color:var(--light);font-size:11px">—</span>'}</td>
+        <td><span style="color:var(--light);font-size:11px">—</span></td>
+        <td>${o.payment==='bank'?`<span class="badge badge-new">${o.total.toFixed(0)} KGS</span>`:'<span class="badge badge-processing">Нал</span>'}</td>
+        <td><button class="action-btn" onclick="printInvoice('${o.id}')">🖨️ Печать</button></td>
+      </tr>`;
+    }).join('')}
+    </tbody></table>
+  </div>`;
+}
+
+function render1cErrors(){
+  const errors=STATE.orders.filter(o=>o.status==='error');
+  return `
+  <div class="card-header" style="margin-bottom:16px"><h2 class="card-title">Ошибки загрузки заказов</h2></div>
+  ${errors.length?errors.map(o=>`
+  <div class="card" style="border-left:4px solid var(--red)">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start">
+      <div>
+        <div class="fw-bold" style="font-size:16px">${o.id}</div>
+        <div class="text-muted" style="font-size:12px">${o.date}</div>
+      </div>
+      <span class="badge badge-error">Ошибка загрузки</span>
+    </div>
+    <div class="info-block error" style="margin-top:12px">
+      <strong>Контрагент не найден в базе 1С</strong>
+      <p>Код: ${o.code1c} — не найден в справочнике контрагентов. Поиск по ИНН ${o.inn} не дал результатов.</p>
+    </div>
+    <div style="display:flex;gap:12px;margin-top:12px">
+      <button class="btn btn-primary" onclick="fixOrderError('${o.id}')">🔧 Назначить контрагента вручную</button>
+      <button class="btn btn-danger" onclick="changeOrderStatus('${o.id}','cancelled');showPage('1c-errors')">Отменить заказ</button>
+    </div>
+  </div>`).join(''):
+  `<div class="empty-state"><div class="icon">✅</div><p>Ошибок нет. Все заказы загружены корректно.</p></div>`}`;
+}
+
+function fixOrderError(id){
+  const o=STATE.orders.find(x=>x.id===id);
+  if(!o)return;
+  o.status='processing';
+  o.code1c='00006311';
+  notify('Контрагент назначен. Заказ '+id+' взят в обработку.','success');
+  showPage('1c-errors');
+}
+
+// ============================================================
+// ORDER DETAIL MODAL
+// ============================================================
+function openOrderDetail(id){
+  const o=STATE.orders.find(x=>x.id===id);
+  if(!o)return;
+  const stepMap={new:1,processing:2,assembly:3,ready:4,delivery:5,delivered:6,cancelled:0,error:0};
+  const step=stepMap[o.status]||0;
+  const steps=['Новый','В обработке','В сборке','Готов к выдаче','Доставляется','Доставлен'];
+  openModal('Детали заказа: '+o.id,`
+  ${step>0?`<div style="display:flex;align-items:center;margin-bottom:20px;padding:16px;background:var(--g3);border-radius:10px">
+  ${steps.map((s,i)=>`<div style="display:flex;flex-direction:column;align-items:center;flex:1;position:relative">
+    ${i<steps.length-1?`<div style="position:absolute;top:12px;left:60%;width:80%;height:2px;background:${i<step-1?'var(--g)':'#ddd'}"></div>`:''}
+    <div style="width:24px;height:24px;border-radius:50%;background:${i<step?'var(--g)':'#ddd'};color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;z-index:1">${i<step?'✓':i+1}</div>
+    <div style="font-size:10px;margin-top:5px;color:${i===step-1?'var(--g)':'var(--mid)'};font-weight:${i===step-1?'700':'400'};text-align:center">${s}</div>
+  </div>`).join('')}
+  </div>`:''}
+  <div class="grid-2">
+    <div>
+      ${profileRow('Клиент',o.clientName)}
+      ${profileRow('ИНН',o.inn)}
+      ${profileRow('Адрес доставки',o.address)}
+      ${profileRow('Оплата',o.payment==='bank'?'💳 Безналичный':'💵 Наличный')}
+      ${profileRow('Маркет',o.market||'—')}
+    </div>
+    <div>
+      ${profileRow('Доверенное лицо',o.proxy.name||'—')}
+      ${profileRow('№ доверенности',o.proxy.num||'—')}
+      ${profileRow('Действует до',o.proxy.validUntil||'—')}
+      ${profileRow('Файл',o.proxy.file||'—')}
+    </div>
+  </div>
+  <div class="divider"></div>
+  <div style="font-weight:700;margin-bottom:8px">Состав заказа</div>
+  <table class="tbl"><thead><tr><th>Товар</th><th>Кол-во</th><th>Цена</th><th>НДС</th><th>Сумма</th></tr></thead>
+  <tbody>${o.items.map(i=>`<tr><td>${i.name}</td><td>${i.qty} ${i.unit}</td><td>${i.price} KGS</td><td>${i.vat}%</td><td class="fw-bold">${(i.price*i.qty).toFixed(2)} KGS</td></tr>`).join('')}</tbody></table>
+  <div style="text-align:right;font-weight:800;font-size:16px;padding:12px 0">ИТОГО: ${o.total.toFixed(2)} KGS</div>`,
+  [
+    {label:'Закрыть',action:'closeModalDirect()',class:'btn-secondary'},
+    {label:'🖨️ Накладная',action:`printInvoice('${o.id}')`,class:'btn-orange'},
+  ]);
+}
+
+// ============================================================
+// MODAL ENGINE
+// ============================================================
+function openModal(title, body, buttons=[]){
+  document.getElementById('modal-title').innerHTML=title;
+  document.getElementById('modal-body').innerHTML=body;
+  document.getElementById('modal-footer').innerHTML=buttons.map(b=>`<button class="btn ${b.class}" onclick="${b.action}">${b.label}</button>`).join('');
+  document.getElementById('modal-overlay').classList.add('open');
+}
+function closeModal(e){if(e.target===document.getElementById('modal-overlay'))closeModalDirect();}
+function closeModalDirect(){document.getElementById('modal-overlay').classList.remove('open');}
+
+// ============================================================
+// HELPERS
+// ============================================================
+function statusLabel(s){
+  const m={new:'Новый',processing:'В обработке',assembly:'В сборке',ready:'Готов к выдаче',delivery:'Доставляется',delivered:'Доставлен',cancelled:'Отменён',error:'Ошибка'};
+  return m[s]||s;
+}
+function statusBadge(s){
+  const cls={new:'badge-new',processing:'badge-processing',assembly:'badge-assembly',ready:'badge-ready',delivery:'badge-delivery',delivered:'badge-done',cancelled:'badge-cancelled',error:'badge-error'};
+  return `<span class="badge ${cls[s]||''}">${statusLabel(s)}</span>`;
+}
+function parseDate(str){
+  if(!str)return new Date();
+  const [d,m,y]=str.split('.');
+  return new Date(y,m-1,d);
+}
+function dateToInput(str){
+  if(!str)return '';
+  const [d,m,y]=str.split('.');
+  return `${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}`;
+}
+function inputToDate(str){
+  if(!str)return '';
+  const [y,m,d]=str.split('-');
+  return `${d}.${m}.${y}`;
+}
+function nextCheckoutStep(){STATE.checkoutStep++;showPage('checkout');}
+let notifTimer;
+function notify(msg,type=''){
+  const el=document.getElementById('notif');
+  el.textContent=msg;
+  el.className='notification show'+(type?' '+type:'');
+  clearTimeout(notifTimer);
+  notifTimer=setTimeout(()=>el.classList.remove('show'),3200);
+}
+
+// ── LANDING + REGISTRATION ──
+function openLoginModal(){
+  const ls=document.getElementById('login-screen');
+  ls.style.display='flex';ls.style.position='fixed';ls.style.inset='0';ls.style.zIndex='500';ls.style.background='rgba(0,0,0,.65)';ls.style.backdropFilter='blur(4px)';
+  ls.classList.add('active');
+}
+function closeLoginModal(){
+  const ls=document.getElementById('login-screen');
+  ls.classList.remove('active');ls.style.display='none';
+}
+function openRegOverlay(){
+  STATE.regStep=1;STATE.regData={};renderRegStep();
+  document.getElementById('reg-overlay').classList.add('open');
+}
+function closeRegOverlay(){document.getElementById('reg-overlay').classList.remove('open');}
+function closeRegSuccess(){document.getElementById('reg-success-ov').classList.remove('open');}
+
+// Registration state
+STATE.regStep=1;
+STATE.regData={};
+
+function renderRegStep(){
+  const s=STATE.regStep,d=STATE.regData;
+  [1,2,3,4].forEach(i=>{const el=document.getElementById('rs'+i);if(el)el.className='rsbi'+(i<s?' done':i===s?' active':'');});
+  const rb=document.getElementById('rbody'),rf=document.getElementById('rftr');
+  if(!rb||!rf)return;
+  if(s===1){
+    rb.innerHTML=`
+    <div class="form-section" style="margin-bottom:16px"><div style="font-size:11px;font-weight:700;color:var(--g);text-transform:uppercase;letter-spacing:.7px;margin-bottom:9px;padding-bottom:5px;border-bottom:2px solid var(--g4)">Данные организации</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><div class="form-group"><label>Наименование <span style="color:var(--red)">*</span></label><input id="ro1" value="${d.org||''}" placeholder="ОсОО / ИП / Учреждение..."></div><div class="form-group"><label>ИНН <span style="color:var(--red)">*</span></label><input id="ro2" value="${d.inn||''}" maxlength="14" placeholder="14 цифр"></div></div>
+    <div class="form-group"><label>Юридический адрес <span style="color:var(--red)">*</span></label><input id="ro3" value="${d.laddr||''}" placeholder="г. Бишкек, ул. ..."></div>
+    <div class="form-group"><label>Фактический адрес доставки</label><input id="ro4" value="${d.addr||''}" placeholder="если отличается от юридического"></div></div>
+    <div class="form-section" style="margin-bottom:16px"><div style="font-size:11px;font-weight:700;color:var(--g);text-transform:uppercase;letter-spacing:.7px;margin-bottom:9px;padding-bottom:5px;border-bottom:2px solid var(--g4)">Контакты организации</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><div class="form-group"><label>Email <span style="color:var(--red)">*</span></label><input type="email" id="ro5" value="${d.email||''}" placeholder="info@company.kg"></div><div class="form-group"><label>Телефон <span style="color:var(--red)">*</span></label><input id="ro6" value="${d.phone||''}" placeholder="+996 XXX XXX XXX"></div></div></div>
+    <div class="form-section"><div style="font-size:11px;font-weight:700;color:var(--g);text-transform:uppercase;letter-spacing:.7px;margin-bottom:9px;padding-bottom:5px;border-bottom:2px solid var(--g4)">Контактные лица</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><div class="form-group"><label>ФИО руководителя <span style="color:var(--red)">*</span></label><input id="ro7" value="${d.dir?.name||''}" placeholder="Иванов Иван Иванович"></div><div class="form-group"><label>Телефон</label><input id="ro8" value="${d.dir?.phone||''}" placeholder="+996 XXX XXX XXX"></div></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><div class="form-group"><label>ФИО бухгалтера</label><input id="ro9" value="${d.acc?.name||''}" placeholder="Петрова А.А."></div><div class="form-group"><label>Телефон</label><input id="ro10" value="${d.acc?.phone||''}" placeholder="+996 XXX XXX XXX"></div></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><div class="form-group"><label>ФИО закупщика</label><input id="ro11" value="${d.buy?.name||''}" placeholder="Сидоров С.С."></div><div class="form-group"><label>Телефон</label><input id="ro12" value="${d.buy?.phone||''}" placeholder="+996 XXX XXX XXX"></div></div></div>`;
+    rf.innerHTML='<div></div><button class="btn btn-primary" onclick="rNext()">Далее →</button>';
+  } else if(s===2){
+    rb.innerHTML=`
+    <div class="form-section" style="margin-bottom:16px"><div style="font-size:11px;font-weight:700;color:var(--g);text-transform:uppercase;letter-spacing:.7px;margin-bottom:9px;padding-bottom:5px;border-bottom:2px solid var(--g4)">Банковские реквизиты</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><div class="form-group"><label>Банк <span style="color:var(--red)">*</span></label><input id="rb1" value="${d.bank||''}" placeholder="Название банка"></div><div class="form-group"><label>БИК / МФО</label><input id="rb2" value="${d.bik||''}" placeholder="XXXXXX"></div></div>
+    <div class="form-group"><label>Расчётный счёт <span style="color:var(--red)">*</span></label><input id="rb3" value="${d.acct||''}" placeholder="1060000XXXXXXXXXXXX"></div></div>
+    <div class="form-section"><div style="font-size:11px;font-weight:700;color:var(--g);text-transform:uppercase;letter-spacing:.7px;margin-bottom:9px;padding-bottom:5px;border-bottom:2px solid var(--g4)">Способ оплаты</div>
+    <div style="display:flex;gap:12px">
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:12px 18px;border:2px solid var(--border);border-radius:8px;flex:1;transition:.2s" id="rpbl"><input type="radio" name="rppay" value="bank" ${(d.pay||'bank')==='bank'?'checked':''} onchange="rpayChange('bank')"> 💳 Безналичный расчёт</label>
+      <label style="display:flex;align-items:center;gap:8px;cursor:pointer;padding:12px 18px;border:2px solid var(--border);border-radius:8px;flex:1;transition:.2s" id="rpcl"><input type="radio" name="rppay" value="cash" ${d.pay==='cash'?'checked':''} onchange="rpayChange('cash')"> 💵 Наличный расчёт</label>
+    </div></div>`;
+    setTimeout(()=>{const v=document.querySelector('input[name="rppay"]:checked')?.value||'bank';document.getElementById('rpbl').style.borderColor=v==='bank'?'var(--g)':'var(--border)';document.getElementById('rpcl').style.borderColor=v==='cash'?'var(--g)':'var(--border)';},10);
+    rf.innerHTML='<button class="btn btn-secondary" onclick="rBack()">← Назад</button><button class="btn btn-primary" onclick="rNext()">Далее →</button>';
+  } else if(s===3){
+    rb.innerHTML=`
+    <div class="info-block blue" style="background:#e3f2fd;border-left:4px solid var(--blue);padding:12px 14px;border-radius:0 8px 8px 0;margin-bottom:14px">
+      <strong style="display:block;margin-bottom:3px;font-size:13px">ℹ️ Доверенное лицо</strong>
+      <p style="font-size:12px;color:var(--mid)">Физическое лицо, уполномоченное вашей организацией получать товары. При доставке обязательно оригинал доверенности + паспорт.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px"><div class="form-group"><label>ФИО доверенного лица <span style="color:var(--red)">*</span></label><input id="rp1" value="${d.pname||d.dir?.name||''}" placeholder="Фамилия Имя Отчество"></div><div class="form-group"><label>Номер доверенности <span style="color:var(--red)">*</span></label><input id="rp2" value="${d.pnum||''}" placeholder="НГ-001/26"></div></div>
+    <div class="form-group" style="max-width:50%"><label>Срок действия (до) <span style="color:var(--red)">*</span></label><input type="date" id="rp3" value="${d.pdate||''}"></div>`;
+    rf.innerHTML='<button class="btn btn-secondary" onclick="rBack()">← Назад</button><button class="btn btn-primary" onclick="rNext()">Далее →</button>';
+  } else {
+    rb.innerHTML=`
+    <div style="background:var(--g3);border-left:4px solid var(--g);padding:12px 14px;border-radius:0 8px 8px 0;margin-bottom:14px">
+      <strong style="display:block;margin-bottom:3px;font-size:13px">📎 Обязательные документы</strong>
+      <p style="font-size:12px;color:var(--mid)">Прикрепите сканы/фото в формате PDF, JPG, PNG (до 10 МБ каждый). Без полного комплекта заявка не будет рассмотрена.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div>
+        <div class="form-group"><label>Устав / учредительные документы <span style="color:var(--red)">*</span></label>
+          <div class="fzone ${d.docs?.charter?'has':''}" onclick="fdoc('charter')">
+            <div style="font-size:26px;margin-bottom:6px">${d.docs?.charter?'✅':'📄'}</div>
+            <div style="font-size:13px;font-weight:600">${d.docs?.charter||'Нажмите для выбора'}</div>
+            <div style="font-size:11px;color:var(--light);margin-top:3px">PDF, JPG, PNG — до 10 МБ</div>
+          </div>
+        </div>
+        <div class="form-group"><label>Свидетельство о регистрации <span style="color:var(--red)">*</span></label>
+          <div class="fzone ${d.docs?.reg?'has':''}" onclick="fdoc('reg')">
+            <div style="font-size:26px;margin-bottom:6px">${d.docs?.reg?'✅':'📄'}</div>
+            <div style="font-size:13px;font-weight:600">${d.docs?.reg||'Нажмите для выбора'}</div>
+            <div style="font-size:11px;color:var(--light);margin-top:3px">PDF, JPG, PNG — до 10 МБ</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="form-group"><label>Документ ИНН <span style="color:var(--red)">*</span></label>
+          <div class="fzone ${d.docs?.inn_doc?'has':''}" onclick="fdoc('inn_doc')">
+            <div style="font-size:26px;margin-bottom:6px">${d.docs?.inn_doc?'✅':'📄'}</div>
+            <div style="font-size:13px;font-weight:600">${d.docs?.inn_doc||'Нажмите для выбора'}</div>
+            <div style="font-size:11px;color:var(--light);margin-top:3px">PDF, JPG, PNG — до 10 МБ</div>
+          </div>
+        </div>
+        <div class="form-group"><label>Доверенность (скан) <span style="color:var(--red)">*</span></label>
+          <div class="fzone ${d.docs?.proxy?'has':''}" onclick="fdoc('proxy')">
+            <div style="font-size:26px;margin-bottom:6px">${d.docs?.proxy?'✅':'📄'}</div>
+            <div style="font-size:13px;font-weight:600">${d.docs?.proxy||'Нажмите для выбора'}</div>
+            <div style="font-size:11px;color:var(--light);margin-top:3px">PDF, JPG, PNG — до 10 МБ</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="form-group"><label>Комментарий менеджеру (необязательно)</label><textarea id="rcom" rows="2" placeholder="Любая дополнительная информация...">${d.comment||''}</textarea></div>`;
+    rf.innerHTML='<button class="btn btn-secondary" onclick="rBack()">← Назад</button><button class="btn btn-primary" style="padding:10px 28px;font-size:14px" onclick="submitReg()">📨 Отправить заявку</button>';
+  }
+}
+function rpayChange(v){document.getElementById('rpbl').style.borderColor=v==='bank'?'var(--g)':'var(--border)';document.getElementById('rpcl').style.borderColor=v==='cash'?'var(--g)':'var(--border)';}
+function fdoc(f){if(!STATE.regData.docs)STATE.regData.docs={};const n={charter:'устав.pdf',reg:'свид_рег.pdf',inn_doc:'инн.pdf',proxy:'доверенность.pdf'};STATE.regData.docs[f]=n[f];renderRegStep();notify('Файл загружен','success');}
+function rBack(){if(STATE.regStep>1){rSave();STATE.regStep--;renderRegStep();}}
+function rNext(){
+  const d=STATE.regData;
+  if(STATE.regStep===1){if(!gvr('ro1')||!gvr('ro2')||!gvr('ro5')||!gvr('ro6')||!gvr('ro7')||!gvr('ro3')){notify('Заполните обязательные поля','error');return;}}
+  if(STATE.regStep===2){if(!gvr('rb1')||!gvr('rb3')){notify('Заполните банковские реквизиты','error');return;}}
+  if(STATE.regStep===3){if(!gvr('rp1')||!gvr('rp2')||!gvr('rp3')){notify('Заполните данные доверенности','error');return;}}
+  rSave();if(STATE.regStep<4){STATE.regStep++;renderRegStep();}
+}
+function rSave(){
+  const d=STATE.regData;
+  if(STATE.regStep===1){d.org=gvr('ro1');d.inn=gvr('ro2');d.laddr=gvr('ro3');d.addr=gvr('ro4')||gvr('ro3');d.email=gvr('ro5');d.phone=gvr('ro6');d.dir={name:gvr('ro7'),phone:gvr('ro8')};d.acc={name:gvr('ro9'),phone:gvr('ro10')};d.buy={name:gvr('ro11'),phone:gvr('ro12')};}
+  else if(STATE.regStep===2){d.bank=gvr('rb1');d.bik=gvr('rb2');d.acct=gvr('rb3');d.pay=document.querySelector('input[name="rppay"]:checked')?.value||'bank';}
+  else if(STATE.regStep===3){d.pname=gvr('rp1');d.pnum=gvr('rp2');d.pdate=gvr('rp3');}
+  else{d.comment=gvr('rcom');}
+}
+function gvr(id){return document.getElementById(id)?.value.trim()||'';}
+function submitReg(){
+  const d=STATE.regData;
+  if(!d.docs||!d.docs.charter||!d.docs.reg||!d.docs.inn_doc||!d.docs.proxy){notify('Прикрепите все обязательные документы','error');return;}
+  rSave();
+  STATE.applications.push({
+    id:'ЗАЯ-'+(STATE.applications.length+1).toString().padStart(3,'0'),
+    org:d.org,inn:d.inn,email:d.email,phone:d.phone,
+    director:d.dir,accountant:d.acc,buyer:d.buy,
+    address:d.addr,legal_address:d.laddr,
+    bank:d.bank,bank_account:d.acct,bik:d.bik||'',
+    proxy_name:d.pname,proxy_num:d.pnum,proxy_date:d.pdate,
+    docs:d.docs,payment:d.pay||'bank',comment:d.comment||'',
+    status:'new',created:new Date().toLocaleString('ru',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'}),
+  });
+  closeRegOverlay();
+  document.getElementById('reg-success-ov').classList.add('open');
+}
+
+// ── MANAGER: APPLICATIONS PAGE ──
+function renderManagerApplications(){
+  const apps = STATE.applications;
+  const na = apps.filter(a=>a.status==='new').length;
+  return `<div class="card-header" style="margin-bottom:16px"><h2 class="card-title">Заявки на подключение</h2></div>
+  <div class="chip-row">
+    ${[['all','Все'],['new','Новые'],['review','На проверке'],['approved','Одобрены'],['rejected','Отклонены']].map(([s,l])=>
+    `<div class="chip ${s==='all'?'active':''}" onclick="filterAppsByStatus('${s}',this)">${l} (${s==='all'?apps.length:apps.filter(a=>a.status===s).length})</div>`).join('')}
+  </div>
+  <div id="apps-list">${renderAppList(apps)}</div>`;
+}
+function filterAppsByStatus(s,el){document.querySelectorAll('.chip-row .chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');const f=s==='all'?STATE.applications:STATE.applications.filter(a=>a.status===s);document.getElementById('apps-list').innerHTML=renderAppList(f);}
+function renderAppList(apps){
+  if(!apps.length)return '<div class="empty-state"><div class="icon">📝</div><p>Нет заявок</p></div>';
+  return apps.map(a=>`<div class="apc ${a.status==='review'?'rev':a.status==='approved'?'app':a.status==='rejected'?'rej':''}">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px">
+      <div style="flex:1">
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:5px">
+          <span style="font-size:16px;font-weight:800">${a.org}</span>
+          ${appStatusBadge(a.status)}
+          <span style="font-size:11px;color:var(--light)">${a.id} · ${a.created}</span>
+        </div>
+        <div style="font-size:12px;color:var(--mid)">ИНН: ${a.inn} · ${a.email} · ${a.phone}</div>
+        <div style="font-size:12px;color:var(--mid);margin-top:3px">Адрес: ${a.address} · Оплата: ${a.payment==='bank'?'Безналичный':'Наличный'}</div>
+        <div style="font-size:12px;color:var(--mid);margin-top:3px">📎 Документов: ${Object.values(a.docs||{}).length} файлов · Рук.: ${a.director?.name||'—'}</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:6px;flex-shrink:0">
+        <button class="btn btn-primary" style="font-size:12px;padding:7px 14px" onclick="openAppDetail('${a.id}')">Открыть заявку</button>
+        ${a.status==='new'?`<button class="action-btn" onclick="setAppSt('${a.id}','review')">На проверку</button>`:''}
+        ${a.status==='review'?`<button class="btn btn-primary" style="font-size:12px;padding:7px 14px;background:var(--g)" onclick="openApproveModal('${a.id}')">✅ Одобрить и создать клиента</button><button class="action-btn danger" onclick="setAppSt('${a.id}','rejected')">Отклонить</button>`:''}
+      </div>
+    </div>
+  </div>`).join('');
+}
+function appStatusBadge(s){const m={new:`<span class="badge badge-new">Новая</span>`,review:`<span class="badge badge-processing">На проверке</span>`,approved:`<span class="badge badge-active">Одобрена</span>`,rejected:`<span class="badge badge-cancelled">Отклонена</span>`};return m[s]||s;}
+function setAppSt(id,st){const a=STATE.applications.find(x=>x.id===id);if(a){a.status=st;notify('Заявка '+id+': статус изменён','success');const el=document.getElementById('apps-list');if(el)el.innerHTML=renderAppList(STATE.applications);}}
+function openAppDetail(id){
+  const a=STATE.applications.find(x=>x.id===id);if(!a)return;
+  openModal('Заявка '+a.id+': '+a.org,
+  `<div class="tab-row"><div class="tab active" onclick="switchTab(this,'adt1')">Организация</div><div class="tab" onclick="switchTab(this,'adt2')">Реквизиты</div><div class="tab" onclick="switchTab(this,'adt3')">Доверенность</div><div class="tab" onclick="switchTab(this,'adt4')">Документы</div></div>
+  <div class="tab-content active" id="adt1">${profileRow('Наименование','<strong>'+a.org+'</strong>')}${profileRow('ИНН',a.inn)}${profileRow('Юр. адрес',a.legal_address||a.address)}${profileRow('Email',a.email)}${profileRow('Телефон',a.phone)}${profileRow('Оплата',a.payment==='bank'?'💳 Безналичный':'💵 Наличный')}<div style="height:1px;background:var(--border);margin:12px 0"></div><div style="font-size:11px;font-weight:700;color:var(--g);text-transform:uppercase;margin-bottom:8px">Контактные лица</div>${profileRow('Руководитель',(a.director?.name||'—')+' · '+(a.director?.phone||''))}${profileRow('Бухгалтер',(a.accountant?.name||'—')+' · '+(a.accountant?.phone||''))}${profileRow('Закупщик',(a.buyer?.name||'—')+' · '+(a.buyer?.phone||''))}</div>
+  <div class="tab-content" id="adt2">${profileRow('Банк',a.bank||'—')}${profileRow('БИК',a.bik||'—')}${profileRow('Расчётный счёт','<code>'+(a.bank_account||'—')+'</code>')}</div>
+  <div class="tab-content" id="adt3">${profileRow('ФИО доверенного лица','<strong>'+(a.proxy_name||'—')+'</strong>')}${profileRow('Номер доверенности',a.proxy_num||'—')}${profileRow('Срок действия',a.proxy_date||'—')}</div>
+  <div class="tab-content" id="adt4">${profileRow('Устав','<span style="color:var(--blue)">'+(a.docs?.charter||'—')+'</span>')}${profileRow('Свидетельство','<span style="color:var(--blue)">'+(a.docs?.reg||'—')+'</span>')}${profileRow('ИНН документ','<span style="color:var(--blue)">'+(a.docs?.inn_doc||'—')+'</span>')}${profileRow('Доверенность','<span style="color:var(--blue)">'+(a.docs?.proxy||'—')+'</span>')}${a.comment?profileRow('Комментарий',a.comment):''}</div>`,
+  [{label:'Закрыть',action:'closeModalDirect()',class:'btn-secondary'},
+   a.status==='review'?{label:'✅ Одобрить и создать клиента',action:"closeModalDirect();openApproveModal('"+a.id+"')",class:'btn-primary'}:{label:'Взять на проверку',action:"setAppSt('"+a.id+"','review');closeModalDirect()",class:'btn-secondary'}]);
+}
+function openApproveModal(id){
+  const a=STATE.applications.find(x=>x.id===id);if(!a)return;
+  const nc='КК'+(STATE.clients.length+1).toString().padStart(4,'0');
+  const nl=a.org.toLowerCase().replace(/[^a-zа-яё0-9]/gi,'').substring(0,10)||'client'+STATE.clients.length;
+  openModal('✅ Одобрение заявки: '+a.org,
+  `<div class="info-block"><strong>Проверьте данные и заполните поля 1С</strong><p>Все данные подтянуты из заявки. Укажите код 1С и данные для входа клиента.</p></div>
+  <div class="form-row"><div class="form-group"><label>Организация</label><input type="text" id="aap1" value="${a.org}"></div><div class="form-group"><label>ИНН</label><input type="text" id="aap2" value="${a.inn}" readonly></div></div>
+  <div class="form-row"><div class="form-group"><label>Email</label><input type="email" id="aap3" value="${a.email}"></div><div class="form-group"><label>Адрес доставки</label><input type="text" id="aap4" value="${a.address}"></div></div>
+  <div class="form-section" style="margin-top:16px"><div style="font-size:11px;font-weight:700;color:var(--g);text-transform:uppercase;letter-spacing:.7px;margin-bottom:9px;padding-bottom:5px;border-bottom:2px solid var(--g4)">Связь с 1С (заполняет менеджер)</div>
+  <div class="form-row"><div class="form-group"><label>Код контрагента 1С <span style="color:var(--red)">*</span></label><input type="text" id="aap5" placeholder="Например: 00008888"></div><div class="form-group"><label>Наименование в 1С</label><input type="text" id="aap6" value="${a.org}"></div></div>
+  <div class="form-row"><div class="form-group"><label>Банк</label><input type="text" id="aap7" value="${a.bank||''}"></div><div class="form-group"><label>Расчётный счёт</label><input type="text" id="aap8" value="${a.bank_account||''}"></div></div>
+  <div class="form-group"><label>Способ оплаты</label><select id="aap9"><option value="bank" ${a.payment==='bank'?'selected':''}>Безналичный расчёт</option><option value="cash" ${a.payment==='cash'?'selected':''}>Наличный расчёт</option></select></div></div>
+  <div class="form-section" style="margin-top:16px"><div style="font-size:11px;font-weight:700;color:var(--g);text-transform:uppercase;letter-spacing:.7px;margin-bottom:9px;padding-bottom:5px;border-bottom:2px solid var(--g4)">Данные для входа (будут переданы клиенту)</div>
+  <div class="form-row"><div class="form-group"><label>Логин <span style="color:var(--red)">*</span></label><input type="text" id="aap10" value="${nl}"></div><div class="form-group"><label>Временный пароль <span style="color:var(--red)">*</span></label><input type="text" id="aap11" value="Umai${new Date().getFullYear()}!"></div></div>
+  <div class="form-group"><label>Код клиента на портале</label><input type="text" value="${nc}" readonly style="background:#f8f8f8"></div></div>
+  <div class="form-group"><label>Комментарий менеджера</label><textarea id="aap12" rows="2"></textarea></div>`,
+  [{label:'Отмена',action:'closeModalDirect()',class:'btn-secondary'},{label:'✅ Создать клиента и выдать доступ',action:"approveAndCreateClient('"+id+"','"+nc+"')",class:'btn-primary'}]);
+}
+function approveAndCreateClient(appId,code){
+  const a=STATE.applications.find(x=>x.id===appId);if(!a)return;
+  const c1c=gvr2('aap5');if(!c1c){notify('Укажите код контрагента 1С','error');return;}
+  const login=gvr2('aap10'),pass=gvr2('aap11');if(!login||!pass){notify('Укажите логин и пароль','error');return;}
+  const newCli={
+    code,org:gvr2('aap1'),inn:a.inn,email:gvr2('aap3'),phone:a.phone,
+    login,code1c:c1c,name1c:gvr2('aap6'),
+    payment:document.getElementById('aap9').value,status:'active',
+    legal_address:a.legal_address||a.address,address:gvr2('aap4'),
+    bank:gvr2('aap7'),bank_account:gvr2('aap8'),bik:a.bik||'',
+    director:a.director,accountant:a.accountant,buyer:a.buyer,
+    proxy:{name:a.proxy_name,num:a.proxy_num,valid:a.proxy_date,file:a.docs?.proxy||''},
+    comment:gvr2('aap12'),proxy_expires:a.proxy_date,
+  };
+  STATE.clients.push(newCli);
+  USERS[login]={pass,role:'client',clientCode:code,name:gvr2('aap1')};
+  a.status='approved';a.client_code=code;
+  closeModalDirect();
+  openModal('🎉 Клиент создан: '+gvr2('aap1'),
+  `<div style="text-align:center;padding:10px 0 20px">
+    <div style="font-size:52px;margin-bottom:14px">🎉</div>
+    <div style="font-size:17px;font-weight:700;margin-bottom:6px">Клиент успешно добавлен в систему!</div>
+    <div style="font-size:13px;color:var(--mid)">Передайте клиенту данные для входа на портал:</div>
+  </div>
+  <div style="background:var(--g3);border-radius:12px;padding:20px;margin-top:10px">
+    <div style="text-align:center;font-size:13px;color:var(--mid);margin-bottom:4px">Адрес портала</div>
+    <div style="text-align:center;font-weight:700;color:var(--g);margin-bottom:18px;font-size:15px">globus-online.kg/b2b</div>
+    ${profileRow('Код клиента','<span class="badge badge-active">'+code+'</span>')}
+    ${profileRow('Логин','<code style="font-size:15px;font-weight:700;color:var(--dark)">'+login+'</code>')}
+    ${profileRow('Временный пароль','<code style="font-size:15px;font-weight:700;color:var(--dark)">'+pass+'</code>')}
+    <div style="text-align:center;font-size:12px;color:var(--mid);margin-top:14px;padding-top:12px;border-top:1px solid var(--g4)">⚠️ Клиент должен сменить пароль при первом входе</div>
+  </div>`,
+  [{label:'Готово',action:"closeModalDirect();showPage('admin-clients')",class:'btn-primary'}]);
+}
+function gvr2(id){return document.getElementById(id)?.value.trim()||'';}
+
+// ── EXTENDED PROFILE PAGE (client) ──
+function renderExtendedProfile(){
+  const c = STATE.clients.find(x=>x.login===Object.keys(USERS).find(k=>USERS[k].clientCode===STATE.user.clientCode))||
+            STATE.clients.find(x=>x.code===STATE.user.clientCode)||STATE.clients[2];
+  const exp=parseDate(c.proxy_expires);const daysLeft=Math.round((exp-new Date())/(864e5));const pw=daysLeft<14;
+  return `<div class="card-header" style="margin-bottom:16px"><h2 class="card-title">Профиль организации</h2><button class="btn btn-primary" onclick="openEditProfileModal()">✏️ Редактировать</button></div>
+  ${pw?`<div class="info-block ${daysLeft<7?'error':'warning'}"><strong>${daysLeft<7?'🔴 Доверенность истекает менее чем через 7 дней!':'⚠️ Доверенность истекает через '+daysLeft+' дней'}</strong><p>Обновите до ${c.proxy_expires}. Обратитесь к вашему менеджеру.</p></div>`:''}
+  <div class="ptabrow">
+    <div class="ptab active" onclick="switchPTab(this,'ptp1')">🏢 Организация</div>
+    <div class="ptab" onclick="switchPTab(this,'ptp2')">💳 Реквизиты</div>
+    <div class="ptab" onclick="switchPTab(this,'ptp3')">📑 Доверенность</div>
+    <div class="ptab" onclick="switchPTab(this,'ptp4')">👥 Контакты</div>
+  </div>
+  <div class="ptabp active" id="ptp1">
+    <div class="g2-grid">
+      <div class="card"><div class="card-title" style="margin-bottom:12px">Основные данные</div>
+        ${profileRow('Код клиента','<span class="badge badge-active">'+c.code+'</span>')}
+        ${profileRow('Наименование','<strong>'+c.org+'</strong>')}
+        ${profileRow('ИНН','<code style="font-size:13px">'+c.inn+'</code>')}
+        ${profileRow('Код контрагента 1С','<code style="font-size:13px">'+c.code1c+'</code>')}
+        ${profileRow('Статус','<span class="badge '+(c.status==='active'?'badge-active':'badge-cancelled')+'">'+(c.status==='active'?'Активен':'Заблокирован')+'</span>')}
+      </div>
+      <div class="card"><div class="card-title" style="margin-bottom:12px">Адреса и контакты</div>
+        ${profileRow('Юридический адрес',c.legal_address||'—')}
+        ${profileRow('Адрес доставки',c.address)}
+        ${profileRow('Email',c.email)}
+        ${profileRow('Телефон',c.phone)}
+        ${profileRow('Способ оплаты',c.payment==='bank'?'💳 Безналичный':'💵 Наличный')}
+      </div>
+    </div>
+  </div>
+  <div class="ptabp" id="ptp2">
+    <div class="card"><div class="card-title" style="margin-bottom:12px">Банковские реквизиты</div>
+      ${c.bank?profileRow('Банк',c.bank)+profileRow('БИК / МФО',c.bik||'—')+profileRow('Расчётный счёт','<code style="font-size:13px">'+c.bank_account+'</code>')+'<div class="info-block" style="margin-top:12px"><p>Для изменения реквизитов обратитесь к вашему менеджеру</p></div>':'<div class="empty-state" style="padding:30px"><p>Реквизиты не указаны. Обратитесь к менеджеру.</p></div>'}
+    </div>
+  </div>
+  <div class="ptabp" id="ptp3">
+    <div class="card"><div class="card-title" style="margin-bottom:12px">Доверенное лицо</div>
+      ${profileRow('ФИО доверенного лица','<strong>'+(c.proxy?.name||'—')+'</strong>')}
+      ${profileRow('Номер доверенности',c.proxy?.num||'—')}
+      ${profileRow('Срок действия','<span class="'+(pw?'text-red':'text-green')+' fw-bold">'+(c.proxy?.valid||c.proxy_expires)+'</span>')}
+      ${profileRow('Скан-копия',c.proxy?.file?'<span style="color:var(--blue)">'+c.proxy.file+'</span>':'—')}
+      <div class="info-block warning" style="margin-top:12px"><strong>⚠️ Обновление доверенности</strong><p>При замене или истечении срока — обратитесь к менеджеру с новым оригиналом доверенности</p></div>
+    </div>
+  </div>
+  <div class="ptabp" id="ptp4">
+    <div class="card"><div class="card-title" style="margin-bottom:12px">Контактные лица</div>
+      <div class="g2-grid">
+        <div><div style="font-size:11px;font-weight:700;color:var(--g);text-transform:uppercase;margin-bottom:8px">Руководитель</div>${profileRow('ФИО',c.director?.name||'—')}${profileRow('Телефон',c.director?.phone||'—')}</div>
+        <div><div style="font-size:11px;font-weight:700;color:var(--g);text-transform:uppercase;margin-bottom:8px">Бухгалтер</div>${profileRow('ФИО',c.accountant?.name||'—')}${profileRow('Телефон',c.accountant?.phone||'—')}</div>
+      </div>
+      <div style="height:1px;background:var(--border);margin:12px 0"></div>
+      <div style="font-size:11px;font-weight:700;color:var(--g);text-transform:uppercase;margin-bottom:8px">Закупщик</div>
+      ${profileRow('ФИО',c.buyer?.name||'—')}${profileRow('Телефон',c.buyer?.phone||'—')}
+    </div>
+  </div>`;
+}
+function switchPTab(el,pid){document.querySelectorAll('.ptab').forEach(t=>t.classList.remove('active'));el.classList.add('active');document.querySelectorAll('.ptabp').forEach(p=>{p.classList.remove('active');if(p.id===pid)p.classList.add('active');});}
+function openEditProfileModal(){
+  const c=STATE.clients.find(x=>x.code===STATE.user.clientCode)||STATE.clients[2];
+  openModal('Редактирование профиля',
+  `<div class="info-block"><strong>ℹ️ Что можно изменить самостоятельно</strong><p>Адрес доставки и контактные лица. Реквизиты, ИНН и способ оплаты — только через менеджера.</p></div>
+  <div class="form-section"><div style="font-size:11px;font-weight:700;color:var(--g);text-transform:uppercase;letter-spacing:.7px;margin-bottom:9px;padding-bottom:5px;border-bottom:2px solid var(--g4)">Адрес доставки</div>
+  <div class="form-group"><label>Основной адрес доставки</label><input type="text" id="epp1" value="${c.address}"></div></div>
+  <div class="form-section"><div style="font-size:11px;font-weight:700;color:var(--g);text-transform:uppercase;letter-spacing:.7px;margin-bottom:9px;padding-bottom:5px;border-bottom:2px solid var(--g4)">Контактные данные</div>
+  <div class="form-row"><div class="form-group"><label>Email</label><input type="email" id="epp2" value="${c.email}"></div><div class="form-group"><label>Телефон</label><input type="text" id="epp3" value="${c.phone}"></div></div></div>
+  <div class="form-section"><div style="font-size:11px;font-weight:700;color:var(--g);text-transform:uppercase;letter-spacing:.7px;margin-bottom:9px;padding-bottom:5px;border-bottom:2px solid var(--g4)">Контактные лица</div>
+  <div class="form-row"><div class="form-group"><label>ФИО руководителя</label><input type="text" id="epp4" value="${c.director?.name||''}"></div><div class="form-group"><label>Телефон</label><input type="text" id="epp5" value="${c.director?.phone||''}"></div></div>
+  <div class="form-row"><div class="form-group"><label>ФИО бухгалтера</label><input type="text" id="epp6" value="${c.accountant?.name||''}"></div><div class="form-group"><label>Телефон</label><input type="text" id="epp7" value="${c.accountant?.phone||''}"></div></div>
+  <div class="form-row"><div class="form-group"><label>ФИО закупщика</label><input type="text" id="epp8" value="${c.buyer?.name||''}"></div><div class="form-group"><label>Телефон</label><input type="text" id="epp9" value="${c.buyer?.phone||''}"></div></div></div>`,
+  [{label:'Отмена',action:'closeModalDirect()',class:'btn-secondary'},{label:'Сохранить изменения',action:"saveExtProfile('"+c.code+"')",class:'btn-primary'}]);
+}
+function saveExtProfile(code){
+  const c=STATE.clients.find(x=>x.code===code);if(!c)return;
+  c.address=gvr2('epp1');c.email=gvr2('epp2');c.phone=gvr2('epp3');
+  c.director={name:gvr2('epp4'),phone:gvr2('epp5')};
+  c.accountant={name:gvr2('epp6'),phone:gvr2('epp7')};
+  c.buyer={name:gvr2('epp8'),phone:gvr2('epp9')};
+  notify('Профиль обновлён','success');closeModalDirect();showPage('profile');
+}
+
+// ── OVERRIDE LOGIN FUNCTIONS ──
+function openLoginModal(){
+  closeRegOverlay();
+  document.getElementById('landing-page').classList.remove('active');
+  document.getElementById('login-screen').classList.add('active');
+}
+function closeLoginModal(){
+  document.getElementById('login-screen').classList.remove('active');
+  document.getElementById('landing-page').classList.add('active');
+}
+
+// ── PATCH LOGOUT ──
+const _origLogout=typeof logout==='function'?logout:null;
+function logout(){
+  STATE.user=null;STATE.cart=[];
+  document.getElementById('login-screen').classList.remove('active');
+  document.getElementById('app').classList.remove('active');
+  document.getElementById('landing-page').classList.add('active');
+}
+
+// ── PATCH doLogin ──
+const _origDoLogin=doLogin;
+doLogin = function(){
+  const login=document.getElementById('login-input').value.trim();
+  const pass=document.getElementById('pass-input').value.trim();
+  const u=USERS[login];
+  if(!u||u.pass!==pass){notify('Неверный логин или пароль','error');return;}
+  if(u.role==='client'){
+    const c=STATE.clients.find(x=>x.login===login);
+    if(c&&c.status==='blocked'){notify('Аккаунт заблокирован. Обратитесь к менеджеру','error');return;}
+  }
+  STATE.user=u;STATE.role=u.role;
+  closeLoginModal();
+  document.getElementById('landing-page').classList.remove('active');
+  document.getElementById('app').classList.add('active');
+  document.getElementById('topbar-username').textContent=u.name;
+  document.getElementById('topbar-avatar').textContent=u.name[0].toUpperCase();
+  document.getElementById('topbar-role-tag').textContent=u.role==='client'?'B2B Клиент':u.role==='manager'?'Менеджер':'Оператор 1С';
+  buildUI();
+};
+
+// ── PATCH showPage to handle new pages ──
+const _origShowPage=showPage;
+showPage=function(page){
+  if(page==='applications'){
+    STATE.page=page;
+    document.querySelectorAll('.sidebar-item').forEach(el=>el.classList.toggle('active',el.getAttribute('onclick')?.includes("'"+page+"'")));
+    document.getElementById('main-content').innerHTML=renderManagerApplications();
+    updateCartSidebar();
+    return;
+  }
+  if(page==='profile'&&STATE.role==='client'){
+    STATE.page=page;
+    document.querySelectorAll('.sidebar-item').forEach(el=>el.classList.toggle('active',el.getAttribute('onclick')?.includes("'"+page+"'")));
+    document.getElementById('main-content').innerHTML=renderExtendedProfile();
+    updateCartSidebar();
+    return;
+  }
+  _origShowPage(page);
+};
+
+// ── PATCH buildUI to add Applications to manager nav ──
+const _origBuildUI=buildUI;
+buildUI=function(){
+  _origBuildUI();
+  if(STATE.role==='manager'){
+    const newApps=STATE.applications.filter(a=>a.status==='new').length;
+
+    const nav=document.getElementById('topbar-nav');
+    if(nav && !nav.querySelector('[data-page="applications"]')){
+      nav.insertAdjacentHTML('beforeend', `
+        <button class="topbar-btn" data-page="applications" onclick="showPage('applications')">
+          📝 Заявки${newApps?` <span style="background:var(--red);color:#fff;padding:1px 6px;border-radius:8px;font-size:10px;margin-left:4px">${newApps}</span>`:''}
+        </button>`);
+    }
+
+    const sb=document.getElementById('sidebar');
+    if(sb && !sb.querySelector('[data-sidebar-page="applications"]')){
+      const settingsSection=sb.querySelector('.sidebar-section:nth-of-type(2)');
+      const itemHtml=`
+        <div class="sidebar-item" data-sidebar-page="applications" onclick="showPage('applications')">
+          <span class="icon">📝</span>Заявки
+          ${newApps?`<span class="sidebar-badge" style="background:var(--acc)">${newApps}</span>`:''}
+        </div>`;
+      if(settingsSection){
+        settingsSection.insertAdjacentHTML('beforebegin', itemHtml);
+      }else{
+        sb.insertAdjacentHTML('beforeend', itemHtml);
+      }
+    }
+  }
+};
+
+// Checkout step2 auto-fill from profile
+const _origRenderCheckout=typeof renderCheckoutStep2==='function'?renderCheckoutStep2:null;
+
+function profileRow(label,val){return '<div class="prow"><span class="prowl">'+label+'</span><span class="prowv">'+val+'</span></div>';}
+function switchTab(el,pid){const c=el.closest('.tab-row');c.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));el.classList.add('active');document.querySelectorAll('.tab-content').forEach(p=>{p.classList.remove('active');if(p.id===pid)p.classList.add('active');});}
+
+</script>
+</body>
+</html>
